@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/17 16:01:59 by mjales           ###   ########.fr       */
+/*   Updated: 2023/10/18 17:53:15 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,16 @@ int worldMap[mapWidth][mapHeight]=
 
 void paint_cub3D()
 {
-	vars()->posX = 22;
-	vars()->posY = 12;
-	vars()->dirX = -1;
-	vars()->dirY = 0;
-	vars()->planeX = 0;
-	vars()->planeY = 0.66;
+
 
 	// cub3D();
 	// while(1)
 	// {
 		for(int x = 0; x < screenWidth; x++)
 		{
-			printf("Inside loop\n");
+			static int teste;
+			teste++;
+			// printf("Inside loop %d\n", teste++);
 			vars()->cameraX = 2 * x / (double)screenWidth - 1;
 			vars()->rayDirX = vars()->dirX + vars()->planeX * vars()->cameraX;
 			vars()->rayDirY = vars()->dirY + vars()->planeY * vars()->cameraX;
@@ -140,8 +137,9 @@ void paint_cub3D()
 			//draw the pixels of the stripe as a vertical line
 			verLine(x, drawStart, drawEnd, color);
 		}
-		vars()->moveSpeed = 0.06;	//frameTime * 5.0; //the constant value is in squares/second
-		vars()->rotSpeed = 	0.035;	//frameTime * 3.0; //the constant value is in radians/second
+		vars()->moveSpeed = 2;	//frameTime * 5.0; //the constant value is in squares/second
+		vars()->rotSpeed = 	1;	//frameTime * 3.0; //the constant value is in radians/second
+	// }
 }
 
 
@@ -156,7 +154,7 @@ int	cub3D(void)
 	img = new_img(screenWidth, screenHeight, tutorial);
 	vars()->win = &tutorial;
 	vars()->img_ptr = &img;
-	paint_cub3D(img, 0, 0);
+	paint_cub3D(/*img, 0, 0*/);
 	mlx_put_image_to_window(img.win.mlx_ptr, img.win.win_ptr, \
 	img.img_ptr, 0, 0);
 	mlx_hook(tutorial.win_ptr, 2, 1L << 0, key_hook, vars());
@@ -168,10 +166,12 @@ int	cub3D(void)
 
 void verLine(int x, int y1, int y2, int color)
 {
+	static int teste;
 	int y;
 	for (y = y1; y <= y2; y++)
 	{
-		printf("Inside verLine\n");
+		teste++;
+		// printf("Inside verLine %d\n", teste);
 		mlx_pixel_put(vars()->win->mlx_ptr, vars()->win->win_ptr, x, y, color);
 	}
 }
@@ -189,6 +189,13 @@ int	main(int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
+
+	vars()->posX = 1;
+	vars()->posY = 1;
+	vars()->dirX = -1;
+	vars()->dirY = 0;
+	vars()->planeX = 0;
+	vars()->planeY = 0.66;
 
 	cub3D();
 }

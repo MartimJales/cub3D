@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/18 17:42:59 by mjales           ###   ########.fr       */
+/*   Updated: 2023/10/25 00:58:47 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	key_hook(int keycode, t_var *v)
 	}
 	else if(keycode == KEY_UP)
 	{
-		printf("KEY_UP\n");
 		if(vars()->worldMap[(int)(vars()->posX + vars()->dirX * vars()->moveSpeed)][(int)vars()->posY] == 0) vars()->posX += vars()->dirX * vars()->moveSpeed;
 		if(vars()->worldMap[(int)vars()->posX][(int)(vars()->posY + vars()->dirY * vars()->moveSpeed)] == 0) vars()->posY += vars()->dirY * vars()->moveSpeed;
 	}

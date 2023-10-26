@@ -17,6 +17,8 @@
 #define mapHeight 24
 #define screenWidth 640
 #define screenHeight 480
+#define texWidth 64
+#define texHeight 64
 
 # include<stdio.h>
 # include<stdlib.h>
@@ -85,6 +87,7 @@ typedef struct s_var
 	int		y;
 	int		mapX;
 	int		mapY;
+	t_img textures[6];
 }	t_var;
 
 t_win	new_program(int w, int h, char *str);
@@ -123,6 +126,15 @@ void new_fractol(void);
 // CUB3D
 void paint_cub3D();
 void verLine(int x, int y1, int y2, int color);
+void	load_textures();
+
+// COLORS
+int	get_opacity(int trgb);
+int	get_r(int trgb);
+int	get_g(int trgb);
+int	get_b(int trgb);
+
+// int		mlx_pixel_put(t_xvar *xvar,t_win_list *win, int x,int y,int color);
 
 # define ESC_KEY 65307
 # define CROSS -16778144

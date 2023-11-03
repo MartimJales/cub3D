@@ -17,6 +17,7 @@
 #define mapHeight 8
 #define screenWidth 1024
 #define screenHeight 512
+#define screen2height 320
 
 #define playerSize 8
 #define cubeSize 64
@@ -30,6 +31,10 @@
 # include "../mlx_linux/mlx.h"
 
 #define PI 3.1415926535
+#define P2 PI/2
+#define P3 3*PI/2
+#define DR 0.0174533
+#define FOV 60
 
 typedef struct s_data {
 	void	*img;
@@ -62,12 +67,12 @@ typedef struct s_img
 typedef struct s_player
 {
 	t_img	img;
-	int		x;
-	int		y;
+	double		x;
+	double		y;
 	int 	size;
-	float	angle;
-	float 	deltaX;
-	float 	deltaY;
+	double	angle;
+	double 	deltaX;
+	double 	deltaY;
 }	t_player;
 
 typedef struct s_var
@@ -77,6 +82,7 @@ typedef struct s_var
 	t_img		floor;
 	t_player	*player;
 	int			map[mapWidth][mapHeight];
+	t_img 		rays;
 }	t_var;
 
 t_win	new_program(int w, int h, char *str);
@@ -96,7 +102,7 @@ int		put_image(void);
 void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
-void 	draw_player(t_img img,int size, int color, int x, int y);
+void 	draw_player(t_img img,int size, int color, double x, double y);
 void 	draw_square(t_img img,int size, int color);
 
 // CUB3D
@@ -124,6 +130,9 @@ void 	draw_square(t_img img,int size, int color);
 # define KEY_RIGHT_M 65363
 
 void draw_map(void);
-void draw_orientation(t_img img,int size, int color);
+void draw_orientation(int size, int color);
+void drawRays2D(t_win window);
+double distance(int ax, int ay, int bx, int by);
+
 
 #endif

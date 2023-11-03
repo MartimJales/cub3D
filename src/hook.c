@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/30 17:04:07 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/02 00:36:51 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,45 +15,60 @@
 int	key_hook(int keycode, t_var *v)
 {
 	(void)v;
-	printf("keycode = %d\n", keycode);
+	// printf("keycode = %d\n", keycode);
+	printf("BEFORE\n");
+	printf("x = %f, y = %f\n", vars()->player->x, vars()->player->y);
 	if (keycode == ESC_KEY_M || keycode == CROSS)
 	{
 		exit_program(vars());
 	}
+	else if (keycode == KEY_RIGHT_M)
+	{
+		printf("KEY_RIGHT\n");
+		// vars()->player->x += 5;
+		vars()->player->angle += 0.1;
+		if (vars()->player->angle > 2 * PI)
+			vars()->player->angle -= 2 * PI;
+		vars()->player->deltaX = cos(vars()->player->angle)*5;
+		vars()->player->deltaY = sin(vars()->player->angle)*5;
+	}
+	else if (keycode == KEY_LEFT_M){
+		printf("KEY_LEFT\n");
+		// vars()->player->x -= 5;
+		vars()->player->angle -= 0.1;
+		if (vars()->player->angle < 0)
+			vars()->player->angle += 2 * PI;
+		vars()->player->deltaX = cos(vars()->player->angle)*5;
+		vars()->player->deltaY = sin(vars()->player->angle)*5;
+	}
 	else if(keycode == KEY_UP_M)
 	{
 		printf("KEY_UP\n");
+
+		// vars()->player->y -= 5;
 		vars()->player->y += vars()->player->deltaY;
 		vars()->player->x += vars()->player->deltaX;
 	}
 	else if (keycode == KEY_DOWN_M)
 	{
 		printf("KEY_DOWN\n");
+		// vars()->player->y += 20;
+
 		vars()->player->y -= vars()->player->deltaY;
 		vars()->player->x -= vars()->player->deltaX;
 	}
-	else if (keycode == KEY_RIGHT_M)
-	{
-		printf("KEY_RIGHT\n");
-		vars()->player->angle += 0.1;
-	}
-	else if (keycode == KEY_LEFT_M){
-		printf("KEY_LEFT\n");
-		vars()->player->angle -= 0.1;
-	}
-	vars()->player->deltaX = cos(vars()->player->angle) * 5;
-	vars()->player->deltaY = sin(vars()->player->angle) * 5;
 
-	// if (vars()->player->angle < 0)
-	// 	vars()->player->angle += 2 * M_PI;
-	// else if (vars()->player->angle > 2 * M_PI)
-	// 	vars()->player->angle = 0;
+	printf("angle = %f\n", vars()->player->angle);
 
-	// if (x < 0 || y < 0 || x > screenWidth-vars()->player->size || y > screenHeight-vars()->player->size)
-	// 	return (0);
 	mlx_clear_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
 	draw_map();
-	draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), vars()->player->x, vars()->player->y); // aagar no fim qaundo tivermos os raios to ginjas
+	draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), vars()->player->x, vars()->player->y);
+
+	printf("deltax = %f, deltay = %f\n", vars()->player->deltaX, vars()->player->deltaY);
+	printf("AFTER\n");
+	printf("x = %f, y = %f\n", vars()->player->x, vars()->player->y);
+
+	drawRays2D(*vars()->win);
 	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
 	return (0);
 }

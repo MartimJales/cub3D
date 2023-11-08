@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/02 12:01:27 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/06 17:03:36 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,9 +305,38 @@ void drawRays2D(t_win window)
 			ra += 2 * PI;
 		if (ra > 2 * PI)
 			ra -= 2 * PI;
-		// t_img teste = new_img(80, lineH, window);
-		// teste.img_ptr =	mlx_xpm_file_to_image(vars()->win->mlx_ptr, "pics/eagle.xpm", &teste.w, &teste.h);
-		// mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, teste.img_ptr, r * 8 + 530, screen2height / 2 - lineH / 2);
+
+		// After you have called new_img somewhere in your code and obtained the image structure:
+		// Here we create a new image structure to hold our XPM image data
+		t_img teste_img;
+		teste_img.img_ptr = mlx_xpm_file_to_image(vars()->win->mlx_ptr, "pics/eagle.xpm", &teste_img.w, &teste_img.h);
+		printf("img_ptr: %p\n", teste_img.img_ptr);
+		if (!teste_img.img_ptr) {
+			// Handle the error if the image did not load
+			printf("Error loading the image\n");
+			return ;
+		}
+		teste_img.addr = mlx_get_data_addr(teste_img.img_ptr, &teste_img.bpp, &teste_img.line_len, &teste_img.endian);
+
+		// This will put the XPM image loaded onto the window at position (0, 0)
+		// mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, teste_img.img_ptr, 0, 0);
+
+		for (int i = 0; i < teste_img.w; i++)
+		{
+			for (int j = 0; j < teste_img.h; j+=2)
+			{
+				// Retrieve color of pixel at (i, j) from 'teste_image'
+				int color = get_pixel_img(teste_img, i, j);
+				// printf("color: %d\n", color);
+				// If 'color' fetched is always 0, check if 'get_pixel_img' handles the 'addr' correctly.
+				// Otherwise, the image data in 'teste_image' might not be initialized correctly.
+
+				// Now 'put_pixel_img' puts the color into the same 'teste_image' or another destination image.
+				// The following should be used to modify 'teste_image', not 'vars()->floor' unless intended.
+				mlx_pixel_put(vars()->win->mlx_ptr, vars()->win->win_ptr, i, j, color);
+				// put_pixel_img(teste_image, i, j, color);
+			}
+		}
 		draw_rectagle(r * 8 + 530, screen2height / 2 - lineH / 2, 8, lineH, color_wall);
 		(void)color_wall;
 	}

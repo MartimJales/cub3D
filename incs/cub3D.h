@@ -80,6 +80,7 @@ typedef struct s_var
 	t_win		*win;
 	t_img		wall;
 	t_img		floor;
+	t_img 		teste;
 	t_player	*player;
 	int			map[mapWidth][mapHeight];
 	t_img 		rays;
@@ -134,5 +135,6 @@ void draw_orientation(int size, int color);
 void drawRays2D(t_win window);
 double distance(int ax, int ay, int bx, int by);
 
+int get_pixel_img(t_img img, int x, int y);
 
 #endif

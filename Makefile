@@ -9,6 +9,7 @@ SRCS        :=      src/hook.c \
                           src/colors.c \
 						  src/mouse.c \
 						  src/libft.c \
+						  src/textures.c \
 
 OBJS        := $(SRCS:.c=.o)
 

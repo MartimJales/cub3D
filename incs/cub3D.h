@@ -135,6 +135,7 @@ void draw_orientation(int size, int color);
 void drawRays2D(t_win window);
 double distance(int ax, int ay, int bx, int by);
 
-int get_pixel_img(t_img img, int x, int y);
+int get_pixel_img(t_img img, int pixel);
+void img_teste(void);
 
 #endif

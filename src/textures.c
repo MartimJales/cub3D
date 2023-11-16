@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 10:18:43 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/09 10:55:26 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/16 14:12:55 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void img_teste(void)
 {
-	vars()->teste.img_ptr = mlx_xpm_file_to_image(vars()->win->mlx_ptr, "pics/eagle.xpm", &vars()->teste.w, &vars()->teste.h);
+	vars()->teste.img_ptr = mlx_xpm_file_to_image(vars()->win->mlx_ptr, "pics/colorstone.xpm", &vars()->teste.w, &vars()->teste.h);
 	if (!vars()->teste.img_ptr) {
 		// Handle the error if the image did not load
 		printf("Error loading the image\n");

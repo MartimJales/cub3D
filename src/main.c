@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/09 12:06:55 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/16 16:45:29 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void draw_map()
 
 }
 
-void draw_rectagle(int x, int y, int width, int height, int color)
+void  draw_rectagle(int x, int y, int width, int height, int color)
 {
 	for (int i = x; i < x + width; i++)
 	{
@@ -166,16 +166,14 @@ void drawRays2D(t_win window)
 	ra = vars()->player->angle - DR*FOV/2;
 	if (ra < 0)
 		ra += 2 * PI;
-	if (ra > 2 * PI)
+	if (ra >= 2 * PI)
 		ra -= 2 * PI;
 	for(r=0;r<60;r++)
 	{
 		//---horizontal---
 		dof=0;
 		double distH = 1000000, hx = vars()->player->x, hy = vars()->player->y;
-		double epsilon = 1e-6; // Uma pequena margem para evitar erros de precisão
-		if (fabs(tan(ra)) > epsilon) {
-			double aTan=-1/tan(ra);
+		double aTan=-1/tan(ra);
 		// Looking UP
 		if (ra>PI)
 		{
@@ -295,33 +293,52 @@ void drawRays2D(t_win window)
 			ca -= 2 * PI;
 		disT = disT * cos(ca);
 		float lineH = (cubeSize * screen2height / disT);
+		float ty_step = 64.0 / lineH;
+		float ty_off = 0;
 		if (lineH > screen2height)
+		{
+			ty_off = (lineH - screen2height)/2;
 			lineH = screen2height;
-
+		}
 		draw_line(vars()->player->x, vars()->player->y, rx, ry, gen_trgb(255, 0, 255, 0));
 		ra+=DR;
 		if (ra < 0)
 			ra += 2 * PI;
-		if (ra > 2 * PI)
+		if (ra >= 2 * PI)
 			ra -= 2 * PI;
-
 		distH *= cos(ca);
 
-		int lineH = cubeSize * screen2height / distH;
+		//lineH = cubeSize * screen2height / distH;
 
-
-		float ty = 0;
-		float ty_step = 64.0 / lineH;
+		float tx;
+		float ty = ty_off*ty_step;
+		float shade = 1;
+		printf("distV: %f, distH: %f\n", distV, distH);
+		if (distH>= distV)
+		{
+			tx = (int)(ry) % 64;
+			shade = 0.5;
+		}
+		else
+			tx = (int)(rx) % 64;
 		for (int y = 0; y < lineH; y++){
-			color_wall = get_pixel_img(vars()->teste, ty * 64);
-			draw_rectagle(r * 8 + 530, screen2height / 2 - lineH / 2 + y, 1, 8, color_wall);
+			// printf("ty step: %f\n", ty_step);
+			// printf("pixel location = %d\n", (int)ty *64);
+			color_wall = get_pixel_img(vars()->teste, (int)tx +  (int)(ty) * 64);
+			// color_wall = gen_trgb(0, 0, (r*3)%255, 0);
+			draw_rectagle(r * 8 + 530, screen2height / 2 - lineH / 2 + y, 8, 8, color_wall * shade);
 			// mlx_pixel_put(vars()->win->mlx_ptr, vars()->win->win_ptr, r * 8 + 530, screen2height / 2 - lineH / 2 + y, color_wall);
 			ty += ty_step;
+			//printf("ty: %d\n", (int)ty);
 		}
+		//printf("lineH: %f\n", lineH);
+		//printf("rx: %f\n", rx);
 		(void)color_wall;
-	}
+
 	(void)window;
+	//printf("rx:%f, ry:%f, r:%d\n", rx, ry, r);
 }
+
 }
 
 int main(int argc, char **argv)

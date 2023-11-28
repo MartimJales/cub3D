@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:46 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/17 11:44:36 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/09 10:54:41 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,36 @@ void	put_pixel_img(t_img img, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x >= 0 && y >= 0)
-	{
+	if (x >= 0 && y >= 0 && x < img.w && y < img.h) {
 		dst = img.addr + (y * img.line_len + x * (img.bpp / 8));
 		*(unsigned int *) dst = color;
 	}
+}
+
+// int get_pixel_img(t_img img, int x, int y)
+// {
+//     char *src;
+//     int color;
+
+//     if (x >= 0 && y >= 0 && x < img.w && y < img.h) {
+//         src = img.addr + (y * img.line_len + x * (img.bpp / 8));
+//         color = *(unsigned int *)src;
+//         return color;
+//     }
+//     return -1; // Retorna um valor negativo para indicar que a posição do pixel é inválida
+// }
+
+int get_pixel_img(t_img img, int pixel)
+{
+    char *src;
+    int color;
+
+    if (pixel >= 0 && pixel < img.w * img.h) {
+		src = img.addr + (pixel * (img.bpp / 8));
+        color = *(unsigned int *)src;
+        return color;
+    }
+    return -1; // Retorna um valor negativo para indicar que a posição do pixel é inválida
 }
 
 t_img	new_img(int w, int h, t_win window)

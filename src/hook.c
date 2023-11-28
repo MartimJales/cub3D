@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/25 00:58:47 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/28 11:49:28 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,51 @@
 int	key_hook(int keycode, t_var *v)
 {
 	(void)v;
-	if (keycode == ESC_KEY || keycode == CROSS)
+	// printf("keycode = %d\n", keycode);
+	if (keycode == ESC_KEY_M || keycode == CROSS)
 	{
 		exit_program(vars());
 	}
-	else if(keycode == KEY_UP)
+	else if (keycode == KEY_RIGHT_M)
 	{
-		if(vars()->worldMap[(int)(vars()->posX + vars()->dirX * vars()->moveSpeed)][(int)vars()->posY] == 0) vars()->posX += vars()->dirX * vars()->moveSpeed;
-		if(vars()->worldMap[(int)vars()->posX][(int)(vars()->posY + vars()->dirY * vars()->moveSpeed)] == 0) vars()->posY += vars()->dirY * vars()->moveSpeed;
+		// vars()->player->x += 5;
+		vars()->player->angle += 0.1;
+		if (vars()->player->angle > 2 * PI)
+			vars()->player->angle -= 2 * PI;
+		vars()->player->deltaX = cos(vars()->player->angle)*5;
+		vars()->player->deltaY = sin(vars()->player->angle)*5;
 	}
-	else if (keycode == KEY_DOWN)
-	{
-		printf("KEY_DOWN\n");
-		if(vars()->worldMap[(int)(vars()->posX - vars()->dirX * vars()->moveSpeed)][(int)vars()->posY] == 0) vars()->posX -= vars()->dirX * vars()->moveSpeed;
-		if(vars()->worldMap[(int)vars()->posX][(int)(vars()->posY - vars()->dirY * vars()->moveSpeed)] == 0) vars()->posY -= vars()->dirY * vars()->moveSpeed;
+	else if (keycode == KEY_LEFT_M){
+		// vars()->player->x -= 5;
+		vars()->player->angle -= 0.1;
+		if (vars()->player->angle < 0)
+			vars()->player->angle += 2 * PI;
+		vars()->player->deltaX = cos(vars()->player->angle)*5;
+		vars()->player->deltaY = sin(vars()->player->angle)*5;
 	}
-	else if (keycode == KEY_RIGHT)
+	else if(keycode == KEY_UP_M)
 	{
-		printf("KEY_RIGHT\n");
-		double oldDirX = vars()->dirX;
-		vars()->dirX = vars()->dirX * cos(-vars()->rotSpeed) - vars()->dirY * sin(-vars()->rotSpeed);
-		vars()->dirY = oldDirX * sin(-vars()->rotSpeed) + vars()->dirY * cos(-vars()->rotSpeed);
-		double oldPlaneX = vars()->planeX;
-		vars()->planeX = vars()->planeX * cos(-vars()->rotSpeed) - vars()->planeY * sin(-vars()->rotSpeed);
-		vars()->planeY = oldPlaneX * sin(-vars()->rotSpeed) + vars()->planeY * cos(-vars()->rotSpeed);
+		// vars()->player->y -= 5;
+		vars()->player->y += vars()->player->deltaY;
+		vars()->player->x += vars()->player->deltaX;
 	}
-	else if (keycode == KEY_LEFT)
+	else if (keycode == KEY_DOWN_M)
 	{
-		printf("KEY_LEFT\n");
-		double oldDirX = vars()->dirX;
-		vars()->dirX = vars()->dirX * cos(vars()->rotSpeed) - vars()->dirY * sin(vars()->rotSpeed);
-		vars()->dirY = oldDirX * sin(vars()->rotSpeed) + vars()->dirY * cos(vars()->rotSpeed);
-		double oldPlaneX = vars()->planeX;
-		vars()->planeX = vars()->planeX * cos(vars()->rotSpeed) - vars()->planeY * sin(vars()->rotSpeed);
-		vars()->planeY = oldPlaneX * sin(vars()->rotSpeed) + vars()->planeY * cos(vars()->rotSpeed);
+		// vars()->player->y += 20;
+		vars()->player->y -= vars()->player->deltaY;
+		vars()->player->x -= vars()->player->deltaX;
 	}
 	mlx_clear_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
-	paint_cub3D();
+		// Draw ceil_img
+	// mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->ceil_img.img_ptr, screenWidth/2, 0);
+	// Draw floor_img
+	// mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->floor_img.img_ptr, screenWidth/2, screenHeight/3);
+
+	draw_map();
+	// draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), vars()->player->x, vars()->player->y);
+
+	drawRays2D(*vars()->win);
+	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
 	return (0);
 }
 
@@ -67,9 +75,9 @@ int	mouse_hook(int keycode)
 int	exit_program(t_var *v)
 {
 	(void)v;
-	mlx_destroy_image(vars()->win->mlx_ptr, vars()->img_ptr->img_ptr);
+	// mlx_destroy_image(vars()->win->mlx_ptr, vars()->img_ptr->img_ptr);
 	mlx_destroy_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
-	mlx_destroy_display(vars()->win->mlx_ptr);
+	//mlx_destroy_display(vars()->win->mlx_ptr);
 	free(vars()->win->mlx_ptr);
 	exit(0);
 }

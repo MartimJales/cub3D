@@ -13,12 +13,14 @@
 #ifndef cub3D_H
 # define cub3D_H
 
-#define mapWidth 24
-#define mapHeight 24
-#define screenWidth 640
-#define screenHeight 480
-#define texWidth 64
-#define texHeight 64
+#define miniMapW 8
+#define miniMapH 8
+#define screenWidth 1024
+#define screenHeight 512
+#define screen2height 512
+
+#define playerSize 4
+#define cubeSize 16
 
 # include<stdio.h>
 # include<stdlib.h>
@@ -26,7 +28,13 @@
 # include<stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
-# include"../mlx_linux/mlx.h"
+# include "../mlx_linux/mlx.h"
+
+#define PI 3.1415926535
+#define P2 PI/2
+#define P3 3*PI/2
+#define DR 0.0174533
+#define FOV 60
 
 typedef struct s_data {
 	void	*img;
@@ -56,38 +64,37 @@ typedef struct s_img
 	int		line_len;
 }	t_img;
 
+typedef struct s_player
+{
+	t_img	img;
+	double		x;
+	double		y;
+	int 	size;
+	double	angle;
+	double 	deltaX;
+	double 	deltaY;
+}	t_player;
+
 typedef struct s_var
 {
-	t_win	*win;
-	t_img	*img_ptr;
-	int		worldMap[mapWidth][mapHeight];
-	double	posX;
-	double	posY;
-	double	dirX;
-	double	dirY;
-	double	planeX;
-	double	planeY;
-	double	time;
-	double	oldTime;
-	double	cameraX;
-	double	rayDirX;
-	double	rayDirY;
-	double	sideDistX;
-	double	sideDistY;
-	double	deltaDistX;
-	double	deltaDistY;
-	double	perpWallDist;
-	int		stepX;
-	int		stepY;
-	int		hit;
-	int		side;
-	double	moveSpeed;
-	double	rotSpeed;
-	int		x;
-	int		y;
-	int		mapX;
-	int		mapY;
-	t_img textures[6];
+	t_win		*win;
+	t_img		wall;
+	t_img		floor;
+	t_img		NO;
+	t_img		SO;
+	t_img		WE;
+	t_img		EA;
+	t_img		teste;
+	t_img 		ceil_img;
+	t_img 		floor_img;
+	t_player	*player;
+	int			map[miniMapW][miniMapH];
+	int			mapWidth;
+	int			mapHeight;
+	t_img 		map_img;
+	t_img 		rays;
+	int 		fcolor;
+	int 		ccolor;
 }	t_var;
 
 t_win	new_program(int w, int h, char *str);
@@ -95,56 +102,59 @@ t_img	new_img(int w, int h, t_win window);
 void	put_pixel_img(t_img img, int x, int y, int color);
 int		key_hook(int keycode, t_var *vars);
 int		mouse_hook(int keycode);
-int		image_mandelbrot(t_img image, int mouse_x, int mouse_y);
-int		image_julia(t_img img, int mouse_x, int mouse_y);
 int		exit_program(t_var *vars);
-void		zoom_in(t_var *vars);
-void		zoom_out(t_var *vars);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
+void 	draw_floor();
+void 	draw_ceil();
 
-int		mandelbrot(void);
-int		julia(void);
-
-int		mandelbrot_pix(double real, double imag, int maxIterations);
 int		map_color(int intensity, int max);
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		put_image(void);
-
+void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
-void	move_up(t_var *vars);
-void	move_down(t_var *vars);
-void	move_left(t_var *vars);
-void	move_right(t_var *vars);
-
-// MOUSE
-void new_fractol(void);
+void 	draw_player(t_img img,int size, int color, double x, double y);
+void 	draw_square(t_img img,int size, int color, int x, int y);
 
 // CUB3D
-void paint_cub3D();
-void verLine(int x, int y1, int y2, int color);
-void	load_textures();
 
-// COLORS
-int	get_opacity(int trgb);
-int	get_r(int trgb);
-int	get_g(int trgb);
-int	get_b(int trgb);
+// # define KEY_UP 		126
+// # define KEY_DOWN		125
+// # define KEY_LEFT		123
+// # define KEY_RIGHT		124
+// # define ESC_KEY		53
+// # define BACKSPACE		51
+// # define W_KEY			13
+// # define A_KEY			0
+// # define S_KEY			1
+// # define D_KEY			2
 
-// int		mlx_pixel_put(t_xvar *xvar,t_win_list *win, int x,int y,int color);
-
-# define ESC_KEY 65307
+# define ESC_KEY_M 65307
 # define CROSS -16778144
 # define LEFT_CLICK 1
 # define RIGHT_CLICK 2
 # define SCROLL_UP 4
 # define SCROLL_DOWN 5
-# define KEY_LEFT 65361
-# define KEY_UP 65362
-# define KEY_DOWN 65364
-# define KEY_RIGHT 65363
+# define KEY_LEFT_M 65361
+# define KEY_UP_M 65362
+# define KEY_DOWN_M 65364
+# define KEY_RIGHT_M 65363
+
+void draw_map(void);
+void draw_orientation(int size, int color);
+void drawRays2D(t_win window);
+double distance(int ax, int ay, int bx, int by);
+
+int get_pixel_img(t_img img, int pixel);
+void img_teste(t_img *img, char *path);
+
+char* ft_strrchr(const char *str, int c);
+int ft_strcmp(const char *s1, const char *s2);
+int check_format(const char *nome_arquivo);
+void parser(char *filename);
+void  fill_image(t_img img, int color);
 
 #endif

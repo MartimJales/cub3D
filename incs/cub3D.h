@@ -13,14 +13,14 @@
 #ifndef cub3D_H
 # define cub3D_H
 
-#define mapWidth 8
-#define mapHeight 8
+#define miniMapW 8
+#define miniMapH 8
 #define screenWidth 1024
 #define screenHeight 512
-#define screen2height 320
+#define screen2height 512
 
-#define playerSize 8
-#define cubeSize 64
+#define playerSize 4
+#define cubeSize 16
 
 # include<stdio.h>
 # include<stdlib.h>
@@ -80,10 +80,21 @@ typedef struct s_var
 	t_win		*win;
 	t_img		wall;
 	t_img		floor;
-	t_img 		teste;
+	t_img		NO;
+	t_img		SO;
+	t_img		WE;
+	t_img		EA;
+	t_img		teste;
+	t_img 		ceil_img;
+	t_img 		floor_img;
 	t_player	*player;
-	int			map[mapWidth][mapHeight];
+	int			map[miniMapW][miniMapH];
+	int			mapWidth;
+	int			mapHeight;
+	t_img 		map_img;
 	t_img 		rays;
+	int 		fcolor;
+	int 		ccolor;
 }	t_var;
 
 t_win	new_program(int w, int h, char *str);
@@ -95,6 +106,8 @@ int		exit_program(t_var *vars);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
+void 	draw_floor();
+void 	draw_ceil();
 
 int		map_color(int intensity, int max);
 
@@ -104,7 +117,7 @@ void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
 void 	draw_player(t_img img,int size, int color, double x, double y);
-void 	draw_square(t_img img,int size, int color);
+void 	draw_square(t_img img,int size, int color, int x, int y);
 
 // CUB3D
 
@@ -136,6 +149,12 @@ void drawRays2D(t_win window);
 double distance(int ax, int ay, int bx, int by);
 
 int get_pixel_img(t_img img, int pixel);
-void img_teste(void);
+void img_teste(t_img *img, char *path);
+
+char* ft_strrchr(const char *str, int c);
+int ft_strcmp(const char *s1, const char *s2);
+int check_format(const char *nome_arquivo);
+void parser(char *filename);
+void  fill_image(t_img img, int color);
 
 #endif

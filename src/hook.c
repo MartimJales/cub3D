@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/09 10:02:40 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/28 11:49:28 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,13 @@ int	key_hook(int keycode, t_var *v)
 		vars()->player->x -= vars()->player->deltaX;
 	}
 	mlx_clear_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
+		// Draw ceil_img
+	// mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->ceil_img.img_ptr, screenWidth/2, 0);
+	// Draw floor_img
+	// mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->floor_img.img_ptr, screenWidth/2, screenHeight/3);
+
 	draw_map();
-	draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), vars()->player->x, vars()->player->y);
+	// draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), vars()->player->x, vars()->player->y);
 
 	drawRays2D(*vars()->win);
 	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);

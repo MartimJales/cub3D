@@ -6,11 +6,12 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/16 16:45:29 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/28 12:57:17 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/cub3D.h"
+
 
 t_var	*vars(void)
 {
@@ -19,13 +20,13 @@ t_var	*vars(void)
 	return (&va);
 }
 
-void draw_square(t_img img,int size, int color)
+void draw_square(t_img img,int size, int color, int x, int y)
 {
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
 		{
-			put_pixel_img(img, i, j, color);
+			put_pixel_img(img, i + x, j + y, color);
 		}
 	}
 }
@@ -80,7 +81,7 @@ void draw_player(t_img img,int size, int color, double x, double y)
 	vars()->player->x = x;
 	vars()->player->y = y;
 	vars()->player->size = size;
-	draw_square(img, size, color);
+	draw_square(img, size, color, 0, 0);
 	draw_orientation(size, gen_trgb(255, 255, 0, 0));
 	draw_reverse(size, gen_trgb(255, 0, 0, 255));
 	vars()->player->img = img;
@@ -88,11 +89,11 @@ void draw_player(t_img img,int size, int color, double x, double y)
 
 void draw_map()
 {
-	for (int i = 0; i < mapHeight; i++)
+	for (int i = 0; i < miniMapH; i++)
 	{
-		for (int j = 0; j < mapWidth; j++)
+		for (int j = 0; j < miniMapW; j++)
 		{
-			if (vars()->map[i][j] == 1)
+			if (vars()->map[i + (int)(vars()->player->x/cubeSize) - 4][j + (int)(vars()->player->y/cubeSize) - 4] == 1)
 				mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->wall.img_ptr, j * (cubeSize) , i * (cubeSize));
 			else
 				mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->floor.img_ptr, j * (cubeSize), i * (cubeSize));
@@ -114,13 +115,13 @@ void create_squares(t_win window)
 {
 	vars()->wall = new_img(cubeSize, cubeSize, window);
 	vars()->floor = new_img(cubeSize, cubeSize, window);
-	draw_square(vars()->wall, cubeSize-1, gen_trgb(0, 255, 255, 255));
-	draw_square(vars()->floor, cubeSize-1, gen_trgb(0, 0, 150, 200));
+	draw_square(vars()->wall, cubeSize-1, gen_trgb(0, 255, 255, 255), 0, 0);
+	draw_square(vars()->floor, cubeSize-1, gen_trgb(0, 0, 150, 200), 0, 0);
 }
 
-void create_map()
+void create_map(t_win window)
 {
-	int mapa[mapWidth][mapHeight] = {
+	int mapa[miniMapW][miniMapH] = {
 		{1,1,1,1,1,1,1,1},
 		{1,0,0,0,0,0,0,1},
 		{1,0,1,0,0,0,0,1},
@@ -130,9 +131,24 @@ void create_map()
 		{1,0,0,0,1,0,0,1},
 		{1,1,1,1,1,1,1,1}
 	};
-	for (int i = 0; i < mapHeight; i++){
-		for (int j = 0; j < mapWidth; j++)
+	for (int i = 0; i < miniMapH; i++){
+		for (int j = 0; j < miniMapW; j++)
 			vars()->map[i][j] = mapa[i][j];
+	}
+
+	vars()->map_img = new_img(vars()->mapWidth * cubeSize, vars()->mapHeight * cubeSize, window);
+	// Create the main map
+	printf("mapWidth: %d, mapHeight: %d\n", vars()->mapWidth, vars()->mapHeight);
+	for (int i = 0; i < vars()->mapHeight; i++)
+	{
+		for (int j = 0; j < vars()->mapWidth; j++)
+		{
+			if (vars()->map[i][j] == 1)
+				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 255, 255, 255), i * cubeSize, j * cubeSize);
+			else
+				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 0, 150, 200), i * cubeSize, j * cubeSize);
+			printf("%d", vars()->map[i][j]);
+		}
 	}
 }
 
@@ -177,7 +193,7 @@ void drawRays2D(t_win window)
 		// Looking UP
 		if (ra>PI)
 		{
-			ry = (((int)vars()->player->y>>6)<<6) - 0.0001;
+			ry = (((int)vars()->player->y>>6)<<6)- 0.0001;
 			rx = (vars()->player->y-ry)*aTan + vars()->player->x;
 			yo = -64;
 			xo = -yo*aTan;
@@ -201,11 +217,11 @@ void drawRays2D(t_win window)
 		{
 			mx = (int)(rx)>>6;
 			my = (int)(ry)>>6;
-			mp = my * mapWidth + mx;
+			mp = my * miniMapW + mx;
 			// printf("mx: %d, my: %d\n", mx, my);
-			if (mx < 0 || my < 0 || mx > mapWidth || my > mapHeight)
-				mp = mapWidth * mapHeight;
-			if (mp > 0 && mp < mapWidth * mapHeight && vars()->map[my][mx] == 1)
+			if (mx < 0 || my < 0 || mx > miniMapW || my > miniMapH)
+				mp = miniMapW * miniMapH;
+			if (mp > 0 && mp < miniMapW * miniMapH && vars()->map[my][mx] == 1)
 			{
 				hx = rx;
 				hy = ry;
@@ -250,11 +266,11 @@ void drawRays2D(t_win window)
 		{
 			mx = (int)(rx)>>6;
 			my = (int)(ry)>>6;
-			mp = my * mapWidth + mx;
+			mp = my * miniMapW + mx;
 			// printf("mx: %d, my: %d\n", mx, my);
-			if (mx < 0 || my < 0 || mx > mapWidth || my > mapHeight)
-				mp = mapWidth * mapHeight;
-			if (mp > 0 && mp < mapWidth * mapHeight && vars()->map[my][mx] == 1)
+			if (mx < 0 || my < 0 || mx > miniMapW || my > miniMapH)
+				mp = miniMapW * miniMapH;
+			if (mp > 0 && mp < miniMapW * miniMapH && vars()->map[my][mx] == 1)
 			{
 				dof = 8;
 				vx = rx;
@@ -284,6 +300,8 @@ void drawRays2D(t_win window)
 			color_wall = gen_trgb(0, 100, 0, 0);
 		}
 		// printf("rx: %f, ry: %f\n", rx, ry);
+		// printf("px: %f, py: %f\n", vars()->player->x, vars()->player->y);
+		// printf("distH: %f, distV: %f\n", distH, distV);
 		// printf("player x: %d, player y: %d\n", vars()->player->x, vars()->player->y);
 		//draw 3d walls
 		float ca = vars()->player->angle - ra;
@@ -306,14 +324,13 @@ void drawRays2D(t_win window)
 			ra += 2 * PI;
 		if (ra >= 2 * PI)
 			ra -= 2 * PI;
-		distH *= cos(ca);
 
 		//lineH = cubeSize * screen2height / distH;
 
 		float tx;
 		float ty = ty_off*ty_step;
 		float shade = 1;
-		printf("distV: %f, distH: %f\n", distV, distH);
+		//printf("distV: %f, distH: %f\n", distV, distH);
 		if (distH>= distV)
 		{
 			tx = (int)(ry) % 64;
@@ -321,7 +338,11 @@ void drawRays2D(t_win window)
 		}
 		else
 			tx = (int)(rx) % 64;
-		for (int y = 0; y < lineH; y++){
+		distH *= cos(ca);
+		// Draw Ceil
+		draw_rectagle(r * 8 + 530, 0, 8, screen2height / 2 - lineH / 2, vars()->ccolor);
+		int y;
+		for (y = 0; y < lineH; y++){
 			// printf("ty step: %f\n", ty_step);
 			// printf("pixel location = %d\n", (int)ty *64);
 			color_wall = get_pixel_img(vars()->teste, (int)tx +  (int)(ty) * 64);
@@ -331,6 +352,8 @@ void drawRays2D(t_win window)
 			ty += ty_step;
 			//printf("ty: %d\n", (int)ty);
 		}
+		// Draw Floor
+		draw_rectagle(r * 8 + 530, screen2height / 2 - lineH / 2 + y, 8, screen2height - (screen2height / 2 - lineH / 2 + y), vars()->fcolor);
 		//printf("lineH: %f\n", lineH);
 		//printf("rx: %f\n", rx);
 		(void)color_wall;
@@ -343,26 +366,50 @@ void drawRays2D(t_win window)
 
 int main(int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
+
+	if (argc != 2) {
+        printf("Error: bad arguments\n");
+        return 1;
+    }
+    if (!check_format(argv[1])) {
+        printf("Error: extensão do arquivo não é .cub\n");
+		return 1;
+    }
+
     t_win window;
 	t_player player;
 
 	vars()->player = &player;
     window = new_program(screenWidth, screenHeight, "cub3d");
 	vars()->win = &window;
-	create_squares(window);
-	create_map();
-	draw_map();
-	img_teste();
+
+	parser(argv[1]);
+
+	// Show SO NO WE EA in window
+
+
 	vars()->player->img = new_img(playerSize, playerSize, window);
-	draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), mapWidth/2*cubeSize, mapHeight/2*cubeSize);
+	// draw_player(vars()->player->img, playerSize, gen_trgb(0, 255, 255, 0), miniMapW/2*cubeSize, miniMapH/2*cubeSize);
 	vars()->player->deltaX = 5;
 	vars()->player->deltaY = 0;
+	create_squares(window);
+	create_map(window);
+	draw_map();
+	// Draw ceil_img
+	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->ceil_img.img_ptr, screenWidth/2, 0);
+	// Draw floor_img
+	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->floor_img.img_ptr, screenWidth/2, screenHeight/3);
+
+	img_teste(&vars()->teste, "pics/colorstone.xpm");
 	drawRays2D(window);
 	mlx_hook(window.win_ptr, 2, 1L<<0, key_hook, vars());
 	mlx_hook(window.win_ptr, 17, 1L << 0, exit_program, vars());
     mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
+	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->NO.img_ptr, 0, 0);
+	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->SO.img_ptr, 0, 64);
+	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->WE.img_ptr, 0, 128);
+	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->EA.img_ptr, 0, 192);
+	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->map_img.img_ptr, 50, 50);
 	mlx_loop(window.mlx_ptr);
     return (0);
 }

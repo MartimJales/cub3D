@@ -1,1 +1,1 @@
-make re && clear && ./cub3D
+make re && clear && ./cub3D $1

@@ -28,6 +28,7 @@
 # include<stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <string.h>
 # include "../mlx_linux/mlx.h"
 
 #define PI 3.1415926535
@@ -73,6 +74,9 @@ typedef struct s_player
 	double	angle;
 	double 	deltaX;
 	double 	deltaY;
+	int 	startx;
+	int 	starty;
+	char 	orientation;
 }	t_player;
 
 typedef struct s_var
@@ -88,7 +92,7 @@ typedef struct s_var
 	t_img 		ceil_img;
 	t_img 		floor_img;
 	t_player	*player;
-	int			map[miniMapW][miniMapH];
+	int			map[100][100];
 	int			mapWidth;
 	int			mapHeight;
 	t_img 		map_img;

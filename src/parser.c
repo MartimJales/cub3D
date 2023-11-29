@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/28 12:42:30 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/29 02:03:34 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,66 @@ char *ft_strncpy(char *dest, const char *src, size_t n) {
     }
 
     return dest;
+}
+
+int char_to_int(char chr)
+{
+	return (chr - '0');
+}
+
+int check_string(char	*input_str)
+{
+    int start_index = 0;
+    while (input_str[start_index] == ' ')
+		start_index++;
+    int end_index = strlen(input_str) - 1;
+    while (end_index >= 0 && input_str[end_index] == ' ')
+		end_index--;
+    if (input_str[start_index] == '1' && input_str[end_index] == '1')
+        return 0;
+    else
+        return 1;
+}
+
+
+int validate_string(char	*input_str)
+{
+	int index = 0;
+    while (input_str[index] != '\0')
+    {
+        char current_char = input_str[index];
+        if (!(char_to_int(current_char) == 0 ||  char_to_int(current_char) == 1 ||
+              current_char == 'N' || current_char == 'S' ||
+              current_char == 'E' || current_char == 'W' ||
+              current_char == ' '))
+            return 1;
+		if (current_char == 'N' || current_char == 'S' ||
+			current_char == 'E' || current_char == 'W')
+		{
+			vars()->player->orientation = current_char;
+			vars()->player->startx = index;
+			vars()->player->starty = vars()->mapHeight;
+			current_char = '0';
+		}
+		if(current_char == ' ')
+			current_char = '0';
+		vars()->map[vars()->mapHeight][index] = char_to_int(current_char);
+        index++;
+    }
+    return 0;
+}
+
+int get_width(char *input_str) {
+    int start_index = 0;
+    int end_index = strlen(input_str) - 1;
+    while (start_index <= end_index && input_str[start_index] == ' ')
+        start_index++;
+    while (end_index >= start_index && input_str[end_index] == ' ')
+        end_index--;
+    int width = 0;
+    for (int i = start_index; i <= end_index; i++)
+        width++;
+    return width;
 }
 
 
@@ -153,12 +213,20 @@ void parseline(char *line)
 		vars()->fcolor = process_string(line + 2);
 	else if (!ft_strncmp(line, "C", 1))
 		vars()->ccolor = process_string(line + 2);
+	else if (!(validate_string(line)) && !(check_string(line)))
+	{
+		vars()->mapHeight++;
+		if(get_width(line) > vars()->mapWidth)
+			vars()->mapWidth = get_width(line);
+	}
 	else
 		printf("Error\nInvalid line\n");
 }
 
 void parser(char *filename)
 {
+	vars()->mapWidth = 0;
+	vars()->mapHeight = 0;
 	// Open filename
 	int fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -185,8 +253,7 @@ void parser(char *filename)
 	fill_image(vars()->ceil_img, vars()->ccolor);
 	fill_image(vars()->floor_img, vars()->fcolor);
 
-	vars()->mapWidth = 8;
-	vars()->mapHeight = 8;
+	printf("mapWidth: %d\n", vars()->mapWidth);
 }
 
 void  fill_image(t_img img, int color)
@@ -199,14 +266,3 @@ void  fill_image(t_img img, int color)
 		}
 	}
 }
-
-// void draw_square(t_img img,int size, int color)
-// {
-// 	for (int i = 0; i < size; i++)
-// 	{
-// 		for (int j = 0; j < size; j++)
-// 		{
-// 			put_pixel_img(img, i, j, color);
-// 		}
-// 	}
-// }

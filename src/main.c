@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/28 12:57:17 by mjales           ###   ########.fr       */
+/*   Updated: 2023/11/29 02:09:50 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,33 +121,15 @@ void create_squares(t_win window)
 
 void create_map(t_win window)
 {
-	int mapa[miniMapW][miniMapH] = {
-		{1,1,1,1,1,1,1,1},
-		{1,0,0,0,0,0,0,1},
-		{1,0,1,0,0,0,0,1},
-		{1,0,1,0,0,0,0,1},
-		{1,0,0,0,0,0,0,1},
-		{1,0,0,0,0,1,0,1},
-		{1,0,0,0,1,0,0,1},
-		{1,1,1,1,1,1,1,1}
-	};
-	for (int i = 0; i < miniMapH; i++){
-		for (int j = 0; j < miniMapW; j++)
-			vars()->map[i][j] = mapa[i][j];
-	}
-
 	vars()->map_img = new_img(vars()->mapWidth * cubeSize, vars()->mapHeight * cubeSize, window);
-	// Create the main map
-	printf("mapWidth: %d, mapHeight: %d\n", vars()->mapWidth, vars()->mapHeight);
-	for (int i = 0; i < vars()->mapHeight; i++)
+	for (int x = 0; x < vars()->mapHeight; x++)
 	{
-		for (int j = 0; j < vars()->mapWidth; j++)
+		for (int y = 0; y < vars()->mapWidth; y++)
 		{
-			if (vars()->map[i][j] == 1)
-				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 255, 255, 255), i * cubeSize, j * cubeSize);
+			if (vars()->map[x][y] == 1)
+				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 255, 255, 255), y * cubeSize, x * cubeSize);
 			else
-				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 0, 150, 200), i * cubeSize, j * cubeSize);
-			printf("%d", vars()->map[i][j]);
+				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 0, 150, 200), y * cubeSize, x * cubeSize);
 		}
 	}
 }
@@ -394,17 +376,17 @@ int main(int argc, char **argv)
 	vars()->player->deltaY = 0;
 	create_squares(window);
 	create_map(window);
-	draw_map();
+	// draw_map();
 	// Draw ceil_img
-	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->ceil_img.img_ptr, screenWidth/2, 0);
+	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->ceil_img.img_ptr, screenWidth/2, 0);
 	// Draw floor_img
-	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->floor_img.img_ptr, screenWidth/2, screenHeight/3);
+	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->floor_img.img_ptr, screenWidth/2, screenHeight/3);
 
 	img_teste(&vars()->teste, "pics/colorstone.xpm");
-	drawRays2D(window);
+	// drawRays2D(window);
 	mlx_hook(window.win_ptr, 2, 1L<<0, key_hook, vars());
 	mlx_hook(window.win_ptr, 17, 1L << 0, exit_program, vars());
-    mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
+    // mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
 	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->NO.img_ptr, 0, 0);
 	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->SO.img_ptr, 0, 64);
 	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->WE.img_ptr, 0, 128);

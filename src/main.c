@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/29 02:09:50 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/04 23:13:19 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void draw_player(t_img img,int size, int color, double x, double y)
 
 void draw_map()
 {
-	for (int i = 0; i < miniMapH; i++)
+	for (int i = 0; i <miniMapH; i++)
 	{
 		for (int j = 0; j < miniMapW; j++)
 		{
@@ -201,9 +201,9 @@ void drawRays2D(t_win window)
 			my = (int)(ry)>>6;
 			mp = my * miniMapW + mx;
 			// printf("mx: %d, my: %d\n", mx, my);
-			if (mx < 0 || my < 0 || mx > miniMapW || my > miniMapH)
+			if (mx < 0 || my < 0 /*|| mx > miniMapW || my > miniMapH*/)
 				mp = miniMapW * miniMapH;
-			if (mp > 0 && mp < miniMapW * miniMapH && vars()->map[my][mx] == 1)
+			if (mp > 0 /*&& mp < miniMapW * miniMapH*/ && vars()->map[my][mx] == 1)
 			{
 				hx = rx;
 				hy = ry;
@@ -250,9 +250,9 @@ void drawRays2D(t_win window)
 			my = (int)(ry)>>6;
 			mp = my * miniMapW + mx;
 			// printf("mx: %d, my: %d\n", mx, my);
-			if (mx < 0 || my < 0 || mx > miniMapW || my > miniMapH)
+			if (mx < 0 || my < 0 /*|| mx > miniMapW || my > miniMapH*/)
 				mp = miniMapW * miniMapH;
-			if (mp > 0 && mp < miniMapW * miniMapH && vars()->map[my][mx] == 1)
+			if (mp > 0 && /*mp < miniMapW * miniMapH &&*/ vars()->map[my][mx] == 1)
 			{
 				dof = 8;
 				vx = rx;
@@ -376,7 +376,7 @@ int main(int argc, char **argv)
 	vars()->player->deltaY = 0;
 	create_squares(window);
 	create_map(window);
-	// draw_map();
+	//draw_map();
 	// Draw ceil_img
 	// mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, vars()->ceil_img.img_ptr, screenWidth/2, 0);
 	// Draw floor_img

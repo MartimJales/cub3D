@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/11/29 02:03:34 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/04 22:26:29 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,10 +248,19 @@ void parser(char *filename)
 	// Close filename
 	close(fd);
 
-	vars()->ceil_img = new_img(vars()->win->width, vars()->win->height / 3, *vars()->win);
-	vars()->floor_img = new_img(vars()->win->width, 2 * vars()->win->height / 3, *vars()->win);
-	fill_image(vars()->ceil_img, vars()->ccolor);
-	fill_image(vars()->floor_img, vars()->fcolor);
+	// vars()->ceil_img = new_img(vars()->win->width, vars()->win->height / 3, *vars()->win);
+	// vars()->floor_img = new_img(vars()->win->width, 2 * vars()->win->height / 3, *vars()->win);
+	// fill_image(vars()->ceil_img, vars()->ccolor);
+	// fill_image(vars()->floor_img, vars()->fcolor);
+
+	printf("start_x: %d\n", vars()->player->startx);
+	printf("start_y: %d\n", vars()->player->starty);
+
+	vars()->player->x = vars()->player->startx * 32;
+	vars()->player->y = vars()->player->starty * 32;
+
+	printf("x: %f\n", vars()->player->x);
+	printf("y: %f\n", vars()->player->y);
 
 	printf("mapWidth: %d\n", vars()->mapWidth);
 }

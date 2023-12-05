@@ -98,6 +98,7 @@ typedef struct s_var
 	int			mapWidth;
 	int			mapHeight;
 	t_img		map_img;
+	t_img		mini_map;
 	t_img 		rays;
 }	t_var;
 

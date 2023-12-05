@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/05 02:42:16 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/05 17:11:36 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,20 @@ void draw_player(t_img img,int size, int color, double x, double y)
 
 void draw_map()
 {
-	for (int i = 0; i < vars()->mapHeight; i++)
-	{
-		for (int j = 0; j < vars()->mapWidth; j++)
-		{
-			if (vars()->map[i][j] == 1)
-				mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->wall.img_ptr, j * (cubeSize) , i * (cubeSize));
-			else
-				mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->floor.img_ptr, j * (cubeSize), i * (cubeSize));
-		}
-	}
-
+	// for (int i = 0; i < vars()->mapHeight; i++)
+	// {
+	// 	for (int j = 0; j < vars()->mapWidth; j++)
+	// 	{
+	// 		if (vars()->map[i][j] == 1)
+	// 			mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->wall.img_ptr, j * (cubeSize) , i * (cubeSize));
+	// 		else
+	// 			mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->floor.img_ptr, j * (cubeSize), i * (cubeSize));
+	// 	}
+	// }
+	// Print debug map
+	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->map_img.img_ptr, 0, 0);
+	// Print mini map
+	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, vars()->mini_map.img_ptr, 0, 0);
 }
 
 void  draw_rectagle(int x, int y, int width, int height, int color)
@@ -120,17 +123,51 @@ void create_squares(t_win window)
 
 void create_map(t_win window)
 {
+	int mini_cube_size = 16;
+	// Create map image for debug
 	vars()->map_img = new_img(vars()->mapWidth * cubeSize, vars()->mapHeight * cubeSize, window);
-	// Create the main map
+	// Create the mini map
+	vars()->mini_map = new_img(vars()->mapWidth * mini_cube_size, vars()->mapHeight * mini_cube_size, window);
 	printf("vars()->mapWidth: %d, vars()->mapHeight: %d\n", vars()->mapWidth, vars()->mapHeight);
 	for (int i = 0; i < vars()->mapHeight; i++)
 	{
 		for (int j = 0; j < vars()->mapWidth; j++)
 		{
 			if (vars()->map[i][j] == 1)
-				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 255, 255, 255), i * cubeSize, j * cubeSize);
+			{
+				draw_square(vars()->mini_map, mini_cube_size-1, gen_trgb(0, 255, 255, 255), j * mini_cube_size, i * mini_cube_size);
+				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 255, 255, 255), j * cubeSize, i * cubeSize);
+			}
 			else
-				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 0, 150, 200), i * cubeSize, j * cubeSize);
+			{
+				draw_square(vars()->mini_map, mini_cube_size-1, gen_trgb(0, 0, 150, 200), j * mini_cube_size, i * mini_cube_size);
+				draw_square(vars()->map_img, cubeSize-1, gen_trgb(0, 0, 150, 200), j * cubeSize, i * cubeSize);
+			}
+			printf("%d", vars()->map[i][j]);
+		}
+	}
+}
+
+void create_map2(t_win window)
+{
+	int mini_cube_size = 16;
+	// Create map image for debug
+	vars()->map_img = new_img(vars()->mapWidth * cubeSize, vars()->mapHeight * cubeSize, window);
+	// Create the mini map
+	vars()->mini_map = new_img(vars()->mapWidth * mini_cube_size, vars()->mapHeight * mini_cube_size, window);
+	printf("vars()->mapWidth: %d, vars()->mapHeight: %d\n", vars()->mapWidth, vars()->mapHeight);
+	for (int i = 0; i < vars()->mapHeight; i++)
+	{
+		for (int j = 0; j < vars()->mapWidth; j++)
+		{
+			if (vars()->map[i][j] == 1)
+			{
+				draw_square(vars()->mini_map, mini_cube_size-1, gen_trgb(0, 255, 255, 255), i * mini_cube_size, j * mini_cube_size);
+			}
+			else
+			{
+				draw_square(vars()->mini_map, mini_cube_size-1, gen_trgb(0, 0, 150, 200), i * mini_cube_size, j * mini_cube_size);
+			}
 			printf("%d", vars()->map[i][j]);
 		}
 	}
@@ -344,10 +381,6 @@ void drawRays2D(t_win window)
 
 int main(int argc, char **argv)
 {
-	if (argc != 2) {
-        printf("Error: bad arguments\n");
-        return 1;
-    }
     if (!check_format(argv[1])) {
         printf("Error: extensão do arquivo não é .cub\n");
 		return 1;

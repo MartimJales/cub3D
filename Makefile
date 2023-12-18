@@ -4,10 +4,8 @@ FLAGS    := -Wall -Wextra -Werror -O3 -g
 
 SRCS        :=      src/hook.c \
                           src/main.c \
-                          src/assets.c \
                           src/image.c \
                           src/colors.c \
-						  src/mouse.c \
 						  src/libft.c \
 						  src/textures.c \
 						  src/parser.c \

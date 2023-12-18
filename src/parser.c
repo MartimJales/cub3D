@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/05 01:34:28 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:12:17 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ int validate_string(char	*input_str)
 		{
 			vars()->player->orientation = current_char;
 			vars()->player->startx = index;
-			vars()->player->starty = vars()->mapHeight;
+			vars()->player->starty = vars()->map_height;
 			current_char = '0';
 		}
 		if(current_char == ' ')
 			current_char = '0';
-		vars()->map[vars()->mapHeight][index] = char_to_int(current_char);
+		vars()->map[vars()->map_height][index] = char_to_int(current_char);
         index++;
     }
     return 0;
@@ -201,23 +201,23 @@ void parseline(char *line)
 		return ;
 	else if (!ft_strncmp(line, "NO", 2)){
 		// printf("NO: %s\n", line + 3);
-		img_teste(&vars()->NO, line + 3);
+		img_teste(&vars()->no, line + 3);
 	}
 	else if (!ft_strncmp(line, "SO", 2))
-		img_teste(&vars()->SO, line + 3);
+		img_teste(&vars()->so, line + 3);
 	else if (!ft_strncmp(line, "WE", 2))
-		img_teste(&vars()->WE, line + 3);
+		img_teste(&vars()->we, line + 3);
 	else if (!ft_strncmp(line, "EA", 2))
-		img_teste(&vars()->EA, line + 3);
+		img_teste(&vars()->ea, line + 3);
 	else if (!ft_strncmp(line, "F", 1))
 		vars()->fcolor = process_string(line + 2);
 	else if (!ft_strncmp(line, "C", 1))
 		vars()->ccolor = process_string(line + 2);
 	else if (!(validate_string(line)) && !(check_string(line)))
 	{
-		vars()->mapHeight++;
-		if(get_width(line) > vars()->mapWidth)
-			vars()->mapWidth = get_width(line);
+		vars()->map_height++;
+		if(get_width(line) > vars()->map_width)
+			vars()->map_width = get_width(line);
 	}
 	else
 		printf("Error\nInvalid line\n");
@@ -225,8 +225,8 @@ void parseline(char *line)
 
 void parser(char *filename)
 {
-	vars()->mapWidth = 0;
-	vars()->mapHeight = 0;
+	vars()->map_width = 0;
+	vars()->map_height = 0;
 	// Open filename
 	int fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -248,10 +248,10 @@ void parser(char *filename)
 	// Close filename
 	close(fd);
 
-	// vars()->ceil_img = new_img(vars()->win->width, vars()->win->height / 3, *vars()->win);
-	// vars()->floor_img = new_img(vars()->win->width, 2 * vars()->win->height / 3, *vars()->win);
-	// fill_image(vars()->ceil_img, vars()->ccolor);
-	// fill_image(vars()->floor_img, vars()->fcolor);
+	vars()->ceil_img = new_img(SCREENWIDTH, (int)SCREENHEIGHT / 3, *vars()->win);
+	vars()->floor_img = new_img(SCREENWIDTH, (int)2 * SCREENHEIGHT / 3, *vars()->win);
+	fill_image(vars()->ceil_img, vars()->ccolor);
+	fill_image(vars()->floor_img, vars()->fcolor);
 
 	// printf("start_x: %d\n", vars()->player->startx);
 	// printf("start_y: %d\n", vars()->player->starty);
@@ -262,7 +262,7 @@ void parser(char *filename)
 	// printf("x: %f\n", vars()->player->x);
 	// printf("y: %f\n", vars()->player->y);
 
-	printf("mapWidth: %d\n", vars()->mapWidth);
+	printf("map_width: %d\n", vars()->map_width);
 }
 
 void  fill_image(t_img img, int color)

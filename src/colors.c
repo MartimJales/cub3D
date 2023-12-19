@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:22:51 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/17 12:23:19 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/15 00:33:04 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,3 @@ int	gen_trgb(int opacity, int red, int green, int blue)
 	return (opacity << 24 | red << 16 | green << 8 | blue);
 }
 
-int	get_opacity(int trgb)
-{
-	return ((trgb >> 24) & 0XFF);
-}
-
-int	get_r(int trgb)
-{
-	return ((trgb >> 16) & 0XFF);
-}
-
-int	get_g(int trgb)
-{
-	return ((trgb >> 8) & 0XFF);
-}
-
-int	get_b(int trgb)
-{
-	return (trgb & 0xFF);
-}

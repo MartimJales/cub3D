@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3D.h.h                                            :+:      :+:    :+:   */
+/*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2023/10/04 12:14:36 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/15 18:01:41 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef cub3D_H
-# define cub3D_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
-#define miniMapW 8
-#define miniMapH 8
-#define screenWidth 1024
-#define screenHeight 512
-#define screen2height 512
+// #define map_width 8
+// #define map_height 8
+# define SCREENWIDTH 600
+# define SCREENHEIGHT 512
+# define SCREEN2HEIGHT 320
+# define RAYNBR 60
 
-#define playerSize 4
-#define cubeSize 16
+# define PLAYERSIZE 8
+# define CUBESIZE 64
 
-# include<stdio.h>
-# include<stdlib.h>
-# include<math.h>
-# include<stdlib.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <math.h>
+# include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include "../mlx_linux/mlx.h"
+# include "string.h"
 
-#define PI 3.1415926535
-#define P2 PI/2
-#define P3 3*PI/2
-#define DR 0.0174533
-#define FOV 60
+# define PI 3.1415926535
+# define P2 1.57079632679
+# define P3 4.71238898038
+# define DR 0.0174533
+# define FOV 60
 
 typedef struct s_data {
 	void	*img;
@@ -64,15 +66,19 @@ typedef struct s_img
 	int		line_len;
 }	t_img;
 
+
 typedef struct s_player
 {
 	t_img	img;
-	double		x;
-	double		y;
-	int 	size;
+	double	x;
+	double	y;
+	int		size;
 	double	angle;
-	double 	deltaX;
-	double 	deltaY;
+	double	delta_x;
+	double	delta_y;
+	int		startx;
+	int		starty;
+	char	orientation;
 }	t_player;
 
 typedef struct s_var
@@ -80,21 +86,51 @@ typedef struct s_var
 	t_win		*win;
 	t_img		wall;
 	t_img		floor;
-	t_img		NO;
-	t_img		SO;
-	t_img		WE;
-	t_img		EA;
+	t_img		ceil_img;
+	t_img		floor_img;
 	t_img		teste;
-	t_img 		ceil_img;
-	t_img 		floor_img;
+	t_img		no;
+	t_img		so;
+	t_img		we;
+	t_img		ea;
+	int			fcolor;
+	int			ccolor;
 	t_player	*player;
-	int			map[miniMapW][miniMapH];
-	int			mapWidth;
-	int			mapHeight;
-	t_img 		map_img;
-	t_img 		rays;
-	int 		fcolor;
-	int 		ccolor;
+	int			map[100][100];
+	int			map_width;
+	int			map_height;
+	t_img		map_img;
+	t_img		mini_map;
+	t_img		rays;
+	int			r;
+	int			mx;
+	int			my;
+	int			mp;
+	int			dof;
+	double		rx;
+	double		ry;
+	double		ra;
+	double		xo;
+	double		yo;
+	double		dist;
+	double		disth;
+	double		atan;
+	double		ntan;
+	double		distv;
+	double		vx;
+	double		vy;
+	double		hx;
+	double		hy;
+	int			color_wall;
+	float		ca;
+	float		line_h;
+	float		ty_step;
+	float		ty;
+	float		tx;
+	float		ty_off;
+	float		shade;
+	int			pix_size;
+
 }	t_var;
 
 t_win	new_program(int w, int h, char *str);
@@ -106,8 +142,6 @@ int		exit_program(t_var *vars);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
-void 	draw_floor();
-void 	draw_ceil();
 
 int		map_color(int intensity, int max);
 
@@ -116,8 +150,10 @@ int		put_image(void);
 void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
-void 	draw_player(t_img img,int size, int color, double x, double y);
-void 	draw_square(t_img img,int size, int color, int x, int y);
+void	draw_player(t_img img, int size, int color, double x, double y);
+void	draw_square(t_img img, int size, int color, int x, int y);
+void	fill_image(t_img img, int color);
+void	draw_rectagle(int x, int y, int width, int height, int color);
 
 // CUB3D
 
@@ -143,18 +179,15 @@ void 	draw_square(t_img img,int size, int color, int x, int y);
 # define KEY_DOWN_M 65364
 # define KEY_RIGHT_M 65363
 
-void draw_map(void);
-void draw_orientation(int size, int color);
-void drawRays2D(t_win window);
-double distance(int ax, int ay, int bx, int by);
+void	draw_map(void);
+void	draw_orientation(int size, int color);
+void	drawRays2D(t_win window);
+double	distance(int ax, int ay, int bx, int by);
 
-int get_pixel_img(t_img img, int pixel);
-void img_teste(t_img *img, char *path);
+int		get_pixel_img(t_img img, int pixel);
+void	img_teste(t_img *img, char *path);
 
-char* ft_strrchr(const char *str, int c);
-int ft_strcmp(const char *s1, const char *s2);
-int check_format(const char *nome_arquivo);
-void parser(char *filename);
-void  fill_image(t_img img, int color);
+void	parser(char *filename);
+int		check_format(const char *nome_arquivo);
 
 #endif

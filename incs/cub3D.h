@@ -13,6 +13,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+<<<<<<< HEAD
 // #define map_width 8
 // #define map_height 8
 # define SCREENWIDTH 600
@@ -22,6 +23,16 @@
 
 # define PLAYERSIZE 8
 # define CUBESIZE 64
+=======
+#define miniMapW 8
+#define miniMapH 8
+#define screenWidth 1024
+#define screenHeight 512
+#define screen2height 512
+
+#define playerSize 4
+#define cubeSize 16
+>>>>>>> origin/main
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -86,6 +97,7 @@ typedef struct s_var
 	t_win		*win;
 	t_img		wall;
 	t_img		floor;
+<<<<<<< HEAD
 	t_img		ceil_img;
 	t_img		floor_img;
 	t_img		teste;
@@ -131,6 +143,23 @@ typedef struct s_var
 	float		shade;
 	int			pix_size;
 
+=======
+	t_img		NO;
+	t_img		SO;
+	t_img		WE;
+	t_img		EA;
+	t_img		teste;
+	t_img 		ceil_img;
+	t_img 		floor_img;
+	t_player	*player;
+	int			map[miniMapW][miniMapH];
+	int			mapWidth;
+	int			mapHeight;
+	t_img 		map_img;
+	t_img 		rays;
+	int 		fcolor;
+	int 		ccolor;
+>>>>>>> origin/main
 }	t_var;
 
 t_win	new_program(int w, int h, char *str);
@@ -142,6 +171,8 @@ int		exit_program(t_var *vars);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
+void 	draw_floor();
+void 	draw_ceil();
 
 int		map_color(int intensity, int max);
 
@@ -150,10 +181,15 @@ int		put_image(void);
 void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
+<<<<<<< HEAD
 void	draw_player(t_img img, int size, int color, double x, double y);
 void	draw_square(t_img img, int size, int color, int x, int y);
 void	fill_image(t_img img, int color);
 void	draw_rectagle(int x, int y, int width, int height, int color);
+=======
+void 	draw_player(t_img img,int size, int color, double x, double y);
+void 	draw_square(t_img img,int size, int color, int x, int y);
+>>>>>>> origin/main
 
 // CUB3D
 
@@ -184,10 +220,21 @@ void	draw_orientation(int size, int color);
 void	drawRays2D(t_win window);
 double	distance(int ax, int ay, int bx, int by);
 
+<<<<<<< HEAD
 int		get_pixel_img(t_img img, int pixel);
 void	img_teste(t_img *img, char *path);
 
 void	parser(char *filename);
 int		check_format(const char *nome_arquivo);
+=======
+int get_pixel_img(t_img img, int pixel);
+void img_teste(t_img *img, char *path);
+
+char* ft_strrchr(const char *str, int c);
+int ft_strcmp(const char *s1, const char *s2);
+int check_format(const char *nome_arquivo);
+void parser(char *filename);
+void  fill_image(t_img img, int color);
+>>>>>>> origin/main
 
 #endif

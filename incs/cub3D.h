@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/15 18:01:41 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:48:26 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,15 +130,28 @@ typedef struct s_var
 	float		ty_off;
 	float		shade;
 	int			pix_size;
+	int			dx;
+	int			sx;
+	int			dy;
+	int			sy;
+	int			err;
+	int			e2;
 
 }	t_var;
+
+typedef struct s_position
+{
+	int	x;
+	int	y;
+	int	color;
+}	t_position;
 
 t_win	new_program(int w, int h, char *str);
 t_img	new_img(int w, int h, t_win window);
 void	put_pixel_img(t_img img, int x, int y, int color);
-int		key_hook(int keycode, t_var *vars);
+int		key_hook(int keycode);
 int		mouse_hook(int keycode);
-int		exit_program(t_var *vars);
+int		exit_program(void);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
@@ -151,7 +164,7 @@ void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
 void	draw_player(t_img img, int size, int color, double x, double y);
-void	draw_square(t_img img, int size, int color, int x, int y);
+void	draw_square(t_img img, int size, t_position pos);
 void	fill_image(t_img img, int color);
 void	draw_rectagle(int x, int y, int width, int height, int color);
 

@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/20 17:09:05 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/20 19:36:39 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,21 +164,17 @@ vars()->segment_end);
 	return (gen_trgb(255, vars()->red, vars()->green, vars()->blue));
 }
 
-//auxiliares parsing
-char*	ft_strrchr(const char *str, int c)
+char	*ft_strrchr(const char *str, int c)
 {
-	char *ultima_ocorrencia = NULL;
+	char	*ultima_ocorrencia;
 
-	printf("str: %s\n", str);
-	while (*str != '\0') {
-		if (*str == c) {
-			ultima_ocorrencia = (char*)str;
-			printf("ultima ocorrencia: %s\n", ultima_ocorrencia);
-		}
+	ultima_ocorrencia = NULL;
+	while (*str != '\0')
+	{
+		if (*str == c)
+			ultima_ocorrencia = (char *)str;
 		str++;
 	}
-	if (*ultima_ocorrencia != '\0')
-		printf("ultima ocorrencia: %s\n", ultima_ocorrencia);
 	return (ultima_ocorrencia);
 }
 
@@ -197,12 +193,10 @@ int	check_format(const char *nome_arquivo)
 	const char	*extensao;
 
 	extensao = ft_strrchr(nome_arquivo, '.');
-	printf("nome do arquivo: %s\n", nome_arquivo);
 	if (extensao != NULL)
 	{
 		if (ft_strcmp(extensao, ".cub") == 0)
 			return (1);
-
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/19 19:48:26 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/20 16:36:29 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ typedef struct s_img
 	int		endian;
 	int		line_len;
 }	t_img;
-
 
 typedef struct s_player
 {
@@ -136,6 +135,12 @@ typedef struct s_var
 	int			sy;
 	int			err;
 	int			e2;
+	int			red;
+	int			green;
+	int			blue;
+	int			segment_count;
+	const char	*segment_start;
+	const char	*segment_end;
 
 }	t_var;
 
@@ -163,10 +168,10 @@ int		put_image(void);
 void	verLine(int x, int y1, int y2, int color);
 
 // MOVE
-void	draw_player(t_img img, int size, int color, double x, double y);
+void	draw_player(t_img img, int size, t_position pos);
 void	draw_square(t_img img, int size, t_position pos);
 void	fill_image(t_img img, int color);
-void	draw_rectagle(int x, int y, int width, int height, int color);
+void	draw_rectagle(int width, int height, t_position pos);
 
 // CUB3D
 
@@ -194,7 +199,7 @@ void	draw_rectagle(int x, int y, int width, int height, int color);
 
 void	draw_map(void);
 void	draw_orientation(int size, int color);
-void	drawRays2D(t_win window);
+void	draw_rays_2d(t_win window);
 double	distance(int ax, int ay, int bx, int by);
 
 int		get_pixel_img(t_img img, int pixel);

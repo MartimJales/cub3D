@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:46 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/15 00:34:03 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/19 19:29:16 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	put_pixel_img(t_img img, int x, int y, int color)
 	}
 }
 
-
 int	get_pixel_img(t_img img, int pixel)
 {
 	char	*src;
@@ -37,8 +36,6 @@ int	get_pixel_img(t_img img, int pixel)
 	}
 	return (-1);
 }
-
-
 
 t_img	new_img(int w, int h, t_win window)
 {

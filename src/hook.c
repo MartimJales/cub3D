@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/15 00:51:32 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/20 15:27:32 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_exit(int keycode)
 {
 	if (keycode == ESC_KEY_M || keycode == CROSS)
 	{
-		exit_program(vars());
+		exit_program();
 	}
 }
 
@@ -54,30 +54,29 @@ void	handle_rotation(int keycode)
 	}
 }
 
-int	key_hook(int keycode, t_var *v)
+int	key_hook(int keycode)
 {
-	(void)v;
+	t_position	pos;
+
 	handle_exit(keycode);
 	handle_rotation(keycode);
 	handle_movement(keycode);
 	mlx_clear_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
-	//draw_map();
-	draw_player(vars()->player->img, PLAYERSIZE, \
-	gen_trgb(0, 255, 255, 0), vars()->player->x, vars()->player->y);
-
-	drawRays2D(*vars()->win);
+	pos.x = vars()->player->x;
+	pos.y = vars()->player->y;
+	pos.color = gen_trgb(0, 255, 255, 0);
+	draw_player(vars()->player->img, PLAYERSIZE, pos);
+	draw_rays_2d(*vars()->win);
 	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
 	vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
 	return (0);
-
 }
 
-int	exit_program(t_var *v)
+// mlx_destroy_image(vars()->win->mlx_ptr, vars()->img_ptr->img_ptr);
+//mlx_destroy_display(vars()->win->mlx_ptr);
+int	exit_program(void)
 {
-	(void)v;
-	// mlx_destroy_image(vars()->win->mlx_ptr, vars()->img_ptr->img_ptr);
 	mlx_destroy_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
-	//mlx_destroy_display(vars()->win->mlx_ptr);
 	free(vars()->win->mlx_ptr);
 	exit(0);
 }

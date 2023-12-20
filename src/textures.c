@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 10:18:43 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/15 00:24:13 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/19 18:26:58 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	img_teste(t_img *img, char *path)
 {
-	printf("path: %s\n", path);
 	img->img_ptr = mlx_xpm_file_to_image(vars()->win->mlx_ptr, \
 path, &img->w, &img->h);
 	if (!img->img_ptr)

@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:22:51 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/15 00:33:04 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/19 18:18:55 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,3 @@ int	gen_trgb(int opacity, int red, int green, int blue)
 		return (0);
 	return (opacity << 24 | red << 16 | green << 8 | blue);
 }
-

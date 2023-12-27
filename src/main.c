@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/20 15:30:35 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/27 14:42:39 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void	init_vars(void)
 		vars()->ra -= 2 * PI;
 }
 
-void	horizontal_check(void)
+void	horizontal_check(double ra)
 {
 	double	disth;
 
@@ -235,9 +235,9 @@ void	horizontal_check(void)
 	vars()->disth = 1000000;
 	vars()->hx = vars()->player->x,
 	vars()->hy = vars()->player->y;
-	vars()->atan = -1 / tan(vars()->ra);
+	vars()->atan = -1 / tan(ra);
 	// Looking UP
-	if (vars()->ra > PI)
+	if (ra > PI)
 	{
 		vars()->ry = (((int)vars()->player->y >> 6) << 6) - 0.0001;
 		vars()->rx = (vars()->player->y - vars()->ry) * \
@@ -246,7 +246,7 @@ vars()->atan + vars()->player->x;
 		vars()->xo = -vars()->yo * vars()->atan;
 	}
 	// Looking DOWN
-	if (vars()->ra < PI)
+	if (ra < PI)
 	{
 		vars()->ry = (((int)vars()->player->y >> 6) << 6) + 64;
 		vars()->rx = (vars()->player->y - vars()->ry) * \
@@ -255,7 +255,7 @@ vars()->atan + vars()->player->x;
 		vars()->xo = -vars()->yo * vars()->atan;
 	}
 	// Looking LEFT or RIGHT
-	if (vars()->ra == 0 || vars()->ra == PI)
+	if (ra == 0 || ra == PI)
 	{
 		vars()->rx = vars()->player->x;
 		vars()->ry = vars()->player->y;
@@ -288,7 +288,7 @@ vars()->player->y, vars()->hx, vars()->hy);
 	}
 }
 
-void	vertical_check(void)
+void	vertical_check(double ra)
 {
 	double	distv;
 
@@ -296,9 +296,9 @@ void	vertical_check(void)
 	vars()->distv = 1000000;
 	vars()->vx = vars()->player->x;
 	vars()->vy = vars()->player->y;
-	vars()->ntan = -tan(vars()->ra);
+	vars()->ntan = -tan(ra);
 	// Looking left
-	if (vars()->ra > P2 && vars()->ra < P3)
+	if (ra > P2 && ra < P3)
 	{
 		vars()->rx = (((int)vars()->player->x >> 6) << 6) - 0.0001;
 		vars()->ry = (vars()->player->x - vars()->rx) * \
@@ -307,7 +307,7 @@ vars()->ntan + vars()->player->y;
 		vars()->yo = -vars()->xo * vars()->ntan;
 	}
 	// Looking right
-	if (vars()->ra < P2 || vars()->ra > P3)
+	if (ra < P2 || ra > P3)
 	{
 		vars()->rx = (((int)vars()->player->x >> 6) << 6) + 64;
 		vars()->ry = (vars()->player->x - vars()->rx) * \
@@ -316,7 +316,7 @@ vars()->ntan + vars()->player->y;
 		vars()->yo = -vars()->xo * vars()->ntan;
 	}
 	// Looking up or down
-	if (vars()->ra == 0 || vars()->ra == PI)
+	if (ra == 0 || ra == PI)
 	{
 		vars()->rx = vars()->player->x;
 		vars()->ry = vars()->player->y;
@@ -427,16 +427,20 @@ get_pixel_img(vars()->teste, (int)(vars()->tx) + (int)(vars()->ty) * 64);
 
 void	draw_rays_2d(t_win window)
 {
+	double	ra;
+
 	init_vars();
 	mlx_put_image_to_window(vars()->win->mlx_ptr, \
 vars()->win->win_ptr, vars()->ceil_img.img_ptr, 0, 0);
 	mlx_put_image_to_window(vars()->win->mlx_ptr, \
 vars()->win->win_ptr, vars()->floor_img.img_ptr, 0, SCREENHEIGHT / 3);
 	vars()->r = 0;
+	ra = vars()->ra;
 	while (vars()->r < RAYNBR)
 	{
-		horizontal_check();
-		vertical_check();
+		ra = vars()->ra;
+		horizontal_check(ra);
+		vertical_check(ra);
 		wall_color();
 		draw_3d_walls();
 		vars()->r++;
@@ -469,9 +473,9 @@ int	main(int argc, char **argv)
 	pos.x = vars()->player->startx * CUBESIZE;
 	pos.y = vars()->player->starty * CUBESIZE;
 	pos.color = gen_trgb(0, 255, 255, 0);
-	draw_player(vars()->player->img, PLAYERSIZE, pos);
 	vars()->player->delta_x = 5;
 	vars()->player->delta_y = 0;
+	draw_player(vars()->player->img, PLAYERSIZE, pos);
 	draw_rays_2d(window);
 	mlx_hook(window.win_ptr, 2, 1L << 0, key_hook, vars());
 	mlx_hook(window.win_ptr, 17, 1L << 0, exit_program, vars());

@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/20 19:36:39 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/27 15:48:22 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	validate_string(char	*input_str)
 	char	current_char;
 
 	index = 0;
+	//Isto é para alterar depois
+	vars()->player->angle = 0;
 	while (input_str[index] != '\0')
 	{
 		current_char = input_str[index];
@@ -216,7 +218,10 @@ char	*get_next_line(int fd)
 		if (character == '\n')
 			break ;
 	}
-	buffer[i - 1] = '\0';
+	if (i > 0)
+		buffer[i - 1] = '\0';
+	else
+		buffer[i] = '\0';
 	if (rd == -1 || i == 0 || (!buffer[i - 1] && !rd))
 		return (free(buffer), NULL);
 	return (buffer);

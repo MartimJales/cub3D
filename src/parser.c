@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/27 15:48:22 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/28 17:05:09 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,29 +52,40 @@ int	check_string(char	*input_str)
 		return (1);
 }
 
-int	validate_string(char	*input_str)
+int	is_valid_character(char current_char)
+{
+	if (char_to_int(current_char) == 0 || char_to_int(current_char) == 1 || \
+		current_char == 'N' || current_char == 'S' || \
+		current_char == 'E' || current_char == 'W' || \
+		current_char == ' ')
+		return (1);
+	else
+		return (0);
+}
+
+void	validate_aux(char current_char, int index)
+{
+	vars()->player->orientation = current_char;
+	vars()->player->startx = index;
+	vars()->player->starty = vars()->map_height;
+}
+
+int	validate_string(char *input_str)
 {
 	int		index;
 	char	current_char;
 
 	index = 0;
-	//Isto é para alterar depois
 	vars()->player->angle = 0;
 	while (input_str[index] != '\0')
 	{
 		current_char = input_str[index];
-		if (!(char_to_int(current_char) == 0 || \
-char_to_int(current_char) == 1 || \
-current_char == 'N' || current_char == 'S' || \
-current_char == 'E' || current_char == 'W' || \
-current_char == ' '))
+		if (!is_valid_character(current_char))
 			return (1);
 		if (current_char == 'N' || current_char == 'S' || \
 			current_char == 'E' || current_char == 'W')
 		{
-			vars()->player->orientation = current_char;
-			vars()->player->startx = index;
-			vars()->player->starty = vars()->map_height;
+			validate_aux(current_char, index);
 			current_char = '0';
 		}
 		if (current_char == ' ')
@@ -124,38 +135,51 @@ int	convert_to_int(const char *start, const char *end)
 	return (atoi(number_str));
 }
 
-int	process_string(const char *str)
+void	init_colors(const char *str)
 {
-	const char	*current_char;
-	int			value;
-
 	vars()->red = 0;
 	vars()->green = 0;
 	vars()->blue = 0;
 	vars()->segment_start = str;
-	current_char = str;
 	vars()->segment_count = 0;
+}
+
+//aux do process string
+int	p_string_aux(const char *current_char)
+{
+	int	value;
+
+	if (*current_char == ',' || *(current_char + 1) == '\0')
+	{
+		if (*current_char == ',')
+			vars()->segment_end = current_char;
+		else
+			vars()->segment_end = current_char + 1;
+		value = convert_to_int(vars()->segment_start, \
+vars()->segment_end);
+		if (value == -1)
+			return (1);
+		if (vars()->segment_count == 0)
+			vars()->red = value;
+		else if (vars()->segment_count == 1)
+			vars()->green = value;
+		else if (vars()->segment_count == 2)
+			vars()->blue = value;
+		vars()->segment_start = current_char + 1;
+		vars()->segment_count++;
+	}
+	return (0);
+}
+
+int	process_string(const char *str)
+{
+	const char	*current_char;
+
+	init_colors(str);
+	current_char = str;
 	while (*current_char != '\0')
 	{
-		if (*current_char == ',' || *(current_char + 1) == '\0')
-		{
-			if (*current_char == ',')
-				vars()->segment_end = current_char;
-			else
-				vars()->segment_end = current_char + 1;
-			value = convert_to_int(vars()->segment_start, \
-vars()->segment_end);
-			if (value == -1)
-				return (0);
-			if (vars()->segment_count == 0)
-				vars()->red = value;
-			else if (vars()->segment_count == 1)
-				vars()->green = value;
-			else if (vars()->segment_count == 2)
-				vars()->blue = value;
-			vars()->segment_start = current_char + 1;
-			vars()->segment_count++;
-		}
+		p_string_aux(current_char);
 		current_char++;
 	}
 	if (vars()->segment_count != 3)
@@ -251,9 +275,20 @@ void	parseline(char *line)
 	}
 }
 
-void	parser(char *filename)
+void	create_images(void)
 {
 	t_img	tmp;
+
+	tmp = new_img(SCREENWIDTH, (int)SCREENHEIGHT / 3, *vars()->win);
+	vars()->ceil_img = tmp;
+	tmp = new_img(SCREENWIDTH, (int)2 * SCREENHEIGHT / 3, *vars()->win);
+	vars()->floor_img = tmp;
+	fill_image(vars()->ceil_img, vars()->ccolor);
+	fill_image(vars()->floor_img, vars()->fcolor);
+}
+
+void	parser(char *filename)
+{
 	char	*line;
 	int		fd;
 
@@ -274,12 +309,7 @@ void	parser(char *filename)
 	}
 	free(line);
 	close(fd);
-	tmp = new_img(SCREENWIDTH, (int)SCREENHEIGHT / 3, *vars()->win);
-	vars()->ceil_img = tmp;
-	tmp = new_img(SCREENWIDTH, (int)2 * SCREENHEIGHT / 3, *vars()->win);
-	vars()->floor_img = tmp;
-	fill_image(vars()->ceil_img, vars()->ccolor);
-	fill_image(vars()->floor_img, vars()->fcolor);
+	create_images();
 }
 
 void	fill_image(t_img img, int color)

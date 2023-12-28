@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/27 14:42:39 by mjales           ###   ########.fr       */
+/*   Updated: 2023/12/28 17:07:25 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	draw_square(t_img img, int size, t_position pos)
 	}
 }
 
-void	draw_line(t_position pos, int x1, int y1)
+//aux do draw_line
+void	line_vars(t_position pos, int x1, int y1)
 {
 	(void)pos.color;
 	vars()->dx = abs(x1 - pos.x);
@@ -51,6 +52,11 @@ void	draw_line(t_position pos, int x1, int y1)
 	else
 		vars()->sy = -1;
 	vars()->err = vars()->dx + vars()->dy;
+}
+
+void	draw_line(t_position pos, int x1, int y1)
+{
+	line_vars(pos, x1, y1);
 	while (1)
 	{
 		mlx_pixel_put(vars()->win->mlx_ptr, \
@@ -161,11 +167,54 @@ void	create_squares(t_win window)
 	draw_square(vars()->floor, CUBESIZE - 1, pos);
 }
 
+void	draw_wall(t_position pos, int i, int j, int mini_cube_size)
+{
+	pos.x = j * mini_cube_size;
+	pos.y = i * mini_cube_size;
+	pos.color = gen_trgb(0, 255, 255, 255);
+	draw_square(vars()->mini_map, mini_cube_size - 1, pos);
+	pos.x = j * CUBESIZE;
+	pos.y = i * CUBESIZE;
+	draw_square(vars()->map_img, CUBESIZE - 1, pos);
+}
+
+//aux create_map
+void	draw_empty(t_position pos, int i, int j, int mini_cube_size)
+{
+	pos.x = j * mini_cube_size;
+	pos.y = i * mini_cube_size;
+	pos.color = gen_trgb(0, 0, 150, 200);
+	draw_square(vars()->mini_map, mini_cube_size - 1, pos);
+	pos.x = j * CUBESIZE;
+	pos.y = i * CUBESIZE;
+	draw_square(vars()->map_img, CUBESIZE - 1, pos);
+}
+
+//aux do create_map
+void	map_loop(t_position pos, int mini_cube_size)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < vars()->map_height)
+	{
+		j = 0;
+		while (j < vars()->map_width)
+		{
+			if (vars()->map[i][j] == 1)
+				draw_wall(pos, i, j, mini_cube_size);
+			else
+				draw_empty(pos, i, j, mini_cube_size);
+			j++;
+		}
+		i++;
+	}
+}
+
 void	create_map(t_win window)
 {
 	int			mini_cube_size;
-	int			i;
-	int			j;
 	t_position	pos;
 	t_img		tmp;
 
@@ -176,36 +225,7 @@ vars()->map_height * CUBESIZE, (t_win)window);
 	tmp = new_img(vars()->map_width * mini_cube_size, \
 vars()->map_height * mini_cube_size, (t_win)window);
 	vars()->mini_map = tmp;
-	i = 0;
-	while (i < vars()->map_height)
-	{
-		j = 0;
-		while (j < vars()->map_width)
-		{
-			if (vars()->map[i][j] == 1)
-			{
-				pos.x = j * mini_cube_size;
-				pos.y = i * mini_cube_size;
-				pos.color = gen_trgb(0, 255, 255, 255);
-				draw_square(vars()->mini_map, mini_cube_size - 1, pos);
-				pos.x = j * CUBESIZE;
-				pos.y = i * CUBESIZE;
-				draw_square(vars()->map_img, CUBESIZE - 1, pos);
-			}
-			else
-			{
-				pos.x = j * mini_cube_size;
-				pos.y = i * mini_cube_size;
-				pos.color = gen_trgb(0, 0, 150, 200);
-				draw_square(vars()->mini_map, mini_cube_size - 1, pos);
-				pos.x = j * CUBESIZE;
-				pos.y = i * CUBESIZE;
-				draw_square(vars()->map_img, CUBESIZE - 1, pos);
-			}
-			j++;
-		}
-		i++;
-	}
+	map_loop(pos, mini_cube_size);
 }
 
 double	distance(int ax, int ay, int bx, int by)
@@ -227,16 +247,17 @@ void	init_vars(void)
 		vars()->ra -= 2 * PI;
 }
 
-void	horizontal_check(double ra)
+void	horizontal_vars(double ra)
 {
-	double	disth;
-
 	vars()->dof = 0;
 	vars()->disth = 1000000;
 	vars()->hx = vars()->player->x,
 	vars()->hy = vars()->player->y;
 	vars()->atan = -1 / tan(ra);
-	// Looking UP
+}
+
+void	look_up_or_down(double ra)
+{
 	if (ra > PI)
 	{
 		vars()->ry = (((int)vars()->player->y >> 6) << 6) - 0.0001;
@@ -245,7 +266,6 @@ vars()->atan + vars()->player->x;
 		vars()->yo = -64;
 		vars()->xo = -vars()->yo * vars()->atan;
 	}
-	// Looking DOWN
 	if (ra < PI)
 	{
 		vars()->ry = (((int)vars()->player->y >> 6) << 6) + 64;
@@ -254,50 +274,66 @@ vars()->atan + vars()->player->x;
 		vars()->yo = 64;
 		vars()->xo = -vars()->yo * vars()->atan;
 	}
-	// Looking LEFT or RIGHT
+}
+
+void	look_left_or_right(double ra)
+{
 	if (ra == 0 || ra == PI)
 	{
 		vars()->rx = vars()->player->x;
 		vars()->ry = vars()->player->y;
 		vars()->dof = 8;
 	}
-	while (vars()->dof < 8)
-	{
-		vars()->mx = (int)(vars()->rx) >> 6;
-		vars()->my = (int)(vars()->ry) >> 6;
-		vars()->mp = vars()->my * vars()->map_width + vars()->mx;
-		if (vars()->mx < 0 || vars()->my < 0 || vars()->mx > \
+}
+
+void	horizontal_loop(void)
+{
+	double	disth;
+
+	vars()->mx = (int)(vars()->rx) >> 6;
+	vars()->my = (int)(vars()->ry) >> 6;
+	vars()->mp = vars()->my * vars()->map_width + vars()->mx;
+	if (vars()->mx < 0 || vars()->my < 0 || vars()->mx > \
 vars()->map_width || vars()->my > vars()->map_height)
-			vars()->mp = vars()->map_width * vars()->map_height;
-		if (vars()->mp > 0 && vars()->mp < vars()->map_width * \
+		vars()->mp = vars()->map_width * vars()->map_height;
+	if (vars()->mp > 0 && vars()->mp < vars()->map_width * \
 vars()->map_height && vars()->map[vars()->my][vars()->mx] == 1)
-		{
-			vars()->hx = vars()->rx;
-			vars()->hy = vars()->ry;
-			disth = distance(vars()->player->x, \
+	{
+		vars()->hx = vars()->rx;
+		vars()->hy = vars()->ry;
+		disth = distance(vars()->player->x, \
 vars()->player->y, vars()->hx, vars()->hy);
-			vars()->disth = disth;
-			vars()->dof = 8;
-		}
-		else
-		{
-			vars()->rx += vars()->xo;
-			vars()->ry += vars()->yo;
-			vars()->dof += 1;
-		}
+		vars()->disth = disth;
+		vars()->dof = 8;
+	}
+	else
+	{
+		vars()->rx += vars()->xo;
+		vars()->ry += vars()->yo;
+		vars()->dof += 1;
 	}
 }
 
-void	vertical_check(double ra)
+void	horizontal_check(double ra)
 {
-	double	distv;
+	horizontal_vars(ra);
+	look_up_or_down(ra);
+	look_left_or_right(ra);
+	while (vars()->dof < 8)
+		horizontal_loop();
+}
 
+void	vertical_vars(double ra)
+{
 	vars()->dof = 0;
 	vars()->distv = 1000000;
 	vars()->vx = vars()->player->x;
 	vars()->vy = vars()->player->y;
 	vars()->ntan = -tan(ra);
-	// Looking left
+}
+
+void	left_or_right(double ra)
+{
 	if (ra > P2 && ra < P3)
 	{
 		vars()->rx = (((int)vars()->player->x >> 6) << 6) - 0.0001;
@@ -306,7 +342,6 @@ vars()->ntan + vars()->player->y;
 		vars()->xo = -64;
 		vars()->yo = -vars()->xo * vars()->ntan;
 	}
-	// Looking right
 	if (ra < P2 || ra > P3)
 	{
 		vars()->rx = (((int)vars()->player->x >> 6) << 6) + 64;
@@ -315,38 +350,55 @@ vars()->ntan + vars()->player->y;
 		vars()->xo = 64;
 		vars()->yo = -vars()->xo * vars()->ntan;
 	}
-	// Looking up or down
+}
+
+//aux do vertical_check
+void	up_or_down(double ra)
+{
 	if (ra == 0 || ra == PI)
 	{
 		vars()->rx = vars()->player->x;
 		vars()->ry = vars()->player->y;
 		vars()->dof = 8;
 	}
-	while (vars()->dof < 8)
-	{
-		vars()->mx = (int)(vars()->rx) >> 6;
-		vars()->my = (int)(vars()->ry) >> 6;
-		vars()->mp = vars()->my * vars()->map_width + vars()->mx;
-		if (vars()->mx < 0 || vars()->my < 0 || \
+}
+
+//aux do vertical_check
+void	vertical_loop(void)
+{
+	double	distv;
+
+	vars()->mx = (int)(vars()->rx) >> 6;
+	vars()->my = (int)(vars()->ry) >> 6;
+	vars()->mp = vars()->my * vars()->map_width + vars()->mx;
+	if (vars()->mx < 0 || vars()->my < 0 || \
 vars()->mx > vars()->map_width || vars()->my > vars()->map_height)
-			vars()->mp = vars()->map_width * vars()->map_height;
-		if (vars()->mp > 0 && vars()->mp < vars()->map_width * \
+		vars()->mp = vars()->map_width * vars()->map_height;
+	if (vars()->mp > 0 && vars()->mp < vars()->map_width * \
 vars()->map_height && vars()->map[vars()->my][vars()->mx] == 1)
-		{
-			vars()->dof = 8;
-			vars()->vx = vars()->rx;
-			vars()->vy = vars()->ry;
-			distv = distance(vars()->player->x, \
+	{
+		vars()->dof = 8;
+		vars()->vx = vars()->rx;
+		vars()->vy = vars()->ry;
+		distv = distance(vars()->player->x, \
 vars()->player->y, vars()->vx, vars()->vy);
-			vars()->distv = distv;
-		}
-		else
-		{
-			vars()->rx += vars()->xo;
-			vars()->ry += vars()->yo;
-			vars()->dof += 1;
-		}
+		vars()->distv = distv;
 	}
+	else
+	{
+		vars()->rx += vars()->xo;
+		vars()->ry += vars()->yo;
+		vars()->dof += 1;
+	}
+}
+
+void	vertical_check(double ra)
+{
+	vertical_vars(ra);
+	left_or_right(ra);
+	up_or_down(ra);
+	while (vars()->dof < 8)
+		vertical_loop();
 }
 
 void	wall_color(void)
@@ -371,15 +423,9 @@ void	wall_color(void)
 	vars()->color_wall = color;
 }
 
-void	draw_3d_walls(void)
+//aux do draw_3d_walls
+void	draw_3d_aux1(t_position pos)
 {
-	int			y;
-	t_position	pos;
-	int			color;
-
-	pos.x = vars()->player->x;
-	pos.y = vars()->player->y;
-	pos.color = gen_trgb(255, 0, 255, 0);
 	vars()->ca = vars()->player->angle - vars()->ra;
 	if (vars()->ca < 0)
 		vars()->ca += 2 * PI;
@@ -402,6 +448,10 @@ void	draw_3d_walls(void)
 		vars()->ra -= 2 * PI;
 	vars()->ty = vars()->ty_off * vars()->ty_step;
 	vars()->shade = 1;
+}
+
+void	draw_3d_aux2(void)
+{
 	if (vars()->disth >= vars()->distv)
 	{
 		vars()->tx = (int)(vars()->ry) % 64;
@@ -411,6 +461,19 @@ void	draw_3d_walls(void)
 		vars()->tx = (int)(vars()->rx) % 64;
 	vars()->disth *= cos(vars()->ca);
 	vars()->pix_size = SCREENWIDTH / RAYNBR;
+}
+
+void	draw_3d_walls(void)
+{
+	int			y;
+	t_position	pos;
+	int			color;
+
+	pos.x = vars()->player->x;
+	pos.y = vars()->player->y;
+	pos.color = gen_trgb(255, 0, 255, 0);
+	draw_3d_aux1(pos);
+	draw_3d_aux2();
 	y = 0;
 	while (y < vars()->line_h)
 	{
@@ -448,39 +511,72 @@ vars()->win->win_ptr, vars()->floor_img.img_ptr, 0, SCREENHEIGHT / 3);
 	(void)window;
 }
 
-int	main(int argc, char **argv)
+t_img	initialize_player_image(void)
 {
-	t_win		window;
-	t_player	player;
-	t_position	pos;
-	t_img		tmp;
+	t_img	tmp;
 
-	(void)argc;
-	if (!check_format(argv[1]))
-	{
-		printf("Error: extensão do arquivo não é .cub\n");
-		return (1);
-	}
-	vars()->player = &player;
-	window = new_program(SCREENWIDTH, SCREENHEIGHT, "cub3d");
-	vars()->win = &window;
-	parser(argv[1]);
-	create_squares(window);
-	create_map(window);
 	img_teste(&vars()->teste, "pics/colorstone.xpm");
-	tmp = new_img(PLAYERSIZE, PLAYERSIZE, window);
-	vars()->player->img = tmp;
+	tmp = new_img(PLAYERSIZE, PLAYERSIZE, *vars()->win);
+	return (tmp);
+}
+
+t_position	initialize_player_position(void)
+{
+	t_position	pos;
+
 	pos.x = vars()->player->startx * CUBESIZE;
 	pos.y = vars()->player->starty * CUBESIZE;
 	pos.color = gen_trgb(0, 255, 255, 0);
+	return (pos);
+}
+
+void	setup_player(void)
+{
 	vars()->player->delta_x = 5;
 	vars()->player->delta_y = 0;
-	draw_player(vars()->player->img, PLAYERSIZE, pos);
+}
+
+void	draw_player_and_rays(t_win window, t_img player_img)
+{
+	draw_player(player_img, PLAYERSIZE, initialize_player_position());
 	draw_rays_2d(window);
+}
+
+void	handle_hooks_and_put_image(t_win window, t_img player_img)
+{
 	mlx_hook(window.win_ptr, 2, 1L << 0, key_hook, vars());
 	mlx_hook(window.win_ptr, 17, 1L << 0, exit_program, vars());
 	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, \
-vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
+player_img.img_ptr, vars()->player->x, vars()->player->y);
 	mlx_loop(window.mlx_ptr);
+}
+
+void	initialize_game(char *file_path)
+{
+	t_win		window;
+	t_player	player;
+	t_img		player_img;
+
+	vars()->player = &player;
+	window = new_program(SCREENWIDTH, SCREENHEIGHT, "cub3d");
+	vars()->win = &window;
+	if (!check_format(file_path))
+	{
+		printf("Error: extensão do arquivo não é .cub\n");
+		exit(1);
+	}
+	parser(file_path);
+	create_squares(window);
+	create_map(window);
+	player_img = initialize_player_image();
+	setup_player();
+	draw_player_and_rays(window, player_img);
+	handle_hooks_and_put_image(window, player_img);
+}
+
+int	main(int argc, char **argv)
+{
+	(void)argc;
+	initialize_game(argv[1]);
 	return (0);
 }

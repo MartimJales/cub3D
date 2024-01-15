@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 10:18:43 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/19 18:26:58 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/14 14:09:03 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ path, &img->w, &img->h);
 	if (!img->img_ptr)
 	{
 		printf("Error loading the image\n");
+		exit_program();
 		return ;
 	}
 	img->addr = mlx_get_data_addr(img->img_ptr, \

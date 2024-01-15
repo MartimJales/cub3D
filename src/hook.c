@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/20 15:27:32 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/13 15:28:36 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void	handle_exit(int keycode)
 
 void	handle_movement(int keycode)
 {
-	if (keycode == KEY_UP_M)
+	if (keycode == KEY_UP_M || keycode == KEY_W)
 	{
 		vars()->player->y += vars()->player->delta_y;
 		vars()->player->x += vars()->player->delta_x;
 	}
-	else if (keycode == KEY_DOWN_M)
+	else if (keycode == KEY_DOWN_M || keycode == KEY_S)
 	{
 		vars()->player->y -= vars()->player->delta_y;
 		vars()->player->x -= vars()->player->delta_x;
@@ -36,7 +36,7 @@ void	handle_movement(int keycode)
 
 void	handle_rotation(int keycode)
 {
-	if (keycode == KEY_RIGHT_M)
+	if (keycode == KEY_RIGHT_M || keycode == KEY_D)
 	{
 		vars()->player->angle += 0.1;
 		if (vars()->player->angle > 2 * PI)
@@ -44,7 +44,7 @@ void	handle_rotation(int keycode)
 		vars()->player->delta_x = cos(vars()->player->angle) * 5;
 		vars()->player->delta_y = sin(vars()->player->angle) * 5;
 	}
-	else if (keycode == KEY_LEFT_M)
+	else if (keycode == KEY_LEFT_M || keycode == KEY_A)
 	{
 		vars()->player->angle -= 0.1;
 		if (vars()->player->angle < 0)
@@ -56,7 +56,7 @@ void	handle_rotation(int keycode)
 
 int	key_hook(int keycode)
 {
-	t_position	pos;
+	t_pos	pos;
 
 	handle_exit(keycode);
 	handle_rotation(keycode);

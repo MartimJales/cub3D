@@ -6,29 +6,11 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/28 17:05:09 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/14 15:28:38 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/cub3D.h"
-
-char	*ft_strncpy(char *dest, const char *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}
 
 int	char_to_int(char chr)
 {
@@ -135,15 +117,6 @@ int	convert_to_int(const char *start, const char *end)
 	return (atoi(number_str));
 }
 
-void	init_colors(const char *str)
-{
-	vars()->red = 0;
-	vars()->green = 0;
-	vars()->blue = 0;
-	vars()->segment_start = str;
-	vars()->segment_count = 0;
-}
-
 //aux do process string
 int	p_string_aux(const char *current_char)
 {
@@ -190,30 +163,6 @@ int	process_string(const char *str)
 	return (gen_trgb(255, vars()->red, vars()->green, vars()->blue));
 }
 
-char	*ft_strrchr(const char *str, int c)
-{
-	char	*ultima_ocorrencia;
-
-	ultima_ocorrencia = NULL;
-	while (*str != '\0')
-	{
-		if (*str == c)
-			ultima_ocorrencia = (char *)str;
-		str++;
-	}
-	return (ultima_ocorrencia);
-}
-
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	while (*s1 != '\0' && *s1 == *s2)
-	{
-		s1++;
-		s2++;
-	}
-	return (*(unsigned char *)s1 - *(unsigned char *)s2);
-}
-
 int	check_format(const char *nome_arquivo)
 {
 	const char	*extensao;
@@ -227,29 +176,78 @@ int	check_format(const char *nome_arquivo)
 	return (0);
 }
 
-char	*get_next_line(int fd)
+// char	*get_next_line(int fd)
+// {
+// 	int		i;
+// 	int		rd;
+// 	char	character;
+// 	char	*buffer;
+
+// 	buffer = malloc(100000);
+// 	i = 0;
+// 	while ((rd = read(fd, &character, 1)) > 0)
+// 	{
+// 		buffer[i++] = character;
+// 		if (character == '\n')
+// 			break ;
+// 	}
+// 	if (i > 0)
+// 		buffer[i - 1] = '\0';
+// 	else
+// 		buffer[i] = '\0';
+// 	if (rd == -1 || i == 0 || (!buffer[i - 1] && !rd))
+// 		return (free(buffer), NULL);
+// 	return (buffer);
+// }
+
+char	*read_line(int fd, int *rd)
 {
-	int		i;
-	int		rd;
 	char	character;
 	char	*buffer;
+	int		i;
 
-	buffer = malloc(100000);
 	i = 0;
-	while ((rd = read(fd, &character, 1)) > 0)
+	buffer = malloc(100000);
+	if (buffer == NULL)
+		return (NULL);
+	while (1)
 	{
+		*rd = read(fd, &character, 1);
+		if (*rd <= 0)
+			break ;
 		buffer[i++] = character;
-		if (character == '\n')
+		if (character == '\n' || *rd <= 0)
 			break ;
 	}
 	if (i > 0)
 		buffer[i - 1] = '\0';
 	else
 		buffer[i] = '\0';
-	if (rd == -1 || i == 0 || (!buffer[i - 1] && !rd))
-		return (free(buffer), NULL);
 	return (buffer);
 }
+
+// while (1)
+// {
+// 	if (*rd = read(fd, &character, 1)) <= 0)
+// 		break;
+
+// }
+
+char	*get_next_line(int fd)
+{
+	int		rd;
+	char	*buffer;
+
+	buffer = read_line(fd, &rd);
+	if (rd == -1 || buffer == NULL || (!buffer[0] && rd <= 0))
+	{
+		free(buffer);
+		return (NULL);
+	}
+	return (buffer);
+}
+
+
 
 void	parseline(char *line)
 {

@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2023/12/20 16:36:29 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/13 19:54:03 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ typedef struct s_position
 	int	x;
 	int	y;
 	int	color;
-}	t_position;
+}	t_pos;
 
 t_win	new_program(int w, int h, char *str);
 t_img	new_img(int w, int h, t_win window);
@@ -167,11 +167,37 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		put_image(void);
 void	verLine(int x, int y1, int y2, int color);
 
+
 // MOVE
-void	draw_player(t_img img, int size, t_position pos);
-void	draw_square(t_img img, int size, t_position pos);
+void	draw_wall(t_pos pos, int i, int j, int mini_cube_size);
+void	draw_empty(t_pos pos, int i, int j, int mini_cube_size);
+void	draw_player(t_img img, int size, t_pos pos);
+void	draw_square(t_img img, int size, t_pos pos);
 void	fill_image(t_img img, int color);
-void	draw_rectagle(int width, int height, t_position pos);
+void	draw_rectagle(int width, int height, t_pos pos);
+void	draw_line(t_pos pos, int x1, int y1);
+void	init_vars(void);
+void	horizontal_check(double ra);
+void	wall_color(void);
+void	vertical_check(double ra);
+void	initialize_game(char *file_path);
+void	setup_player(void);
+t_pos	initialize_player_position(void);
+void	create_squares(t_win window);
+void	create_map(t_win window);
+void	draw_player_and_rays(t_win window, t_img player_img);
+void	handle_hooks_and_put_image(t_win window, t_img player_img);
+void	line_vars(t_pos pos, int x1, int y1);
+void	look_up_or_down(double ra);
+void	look_left_or_right(double ra);
+void	left_or_right(double ra);
+void	up_or_down(double ra);
+char	*ft_strncpy(char *dest, const char *src, size_t n);
+void	init_colors(const char *str);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strrchr(const char *str, int c);
+
+
 
 // CUB3D
 
@@ -196,6 +222,11 @@ void	draw_rectagle(int width, int height, t_position pos);
 # define KEY_UP_M 65362
 # define KEY_DOWN_M 65364
 # define KEY_RIGHT_M 65363
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+
 
 void	draw_map(void);
 void	draw_orientation(int size, int color);
@@ -207,5 +238,6 @@ void	img_teste(t_img *img, char *path);
 
 void	parser(char *filename);
 int		check_format(const char *nome_arquivo);
+
 
 #endif

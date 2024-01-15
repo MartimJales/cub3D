@@ -9,6 +9,14 @@ SRCS        :=      src/hook.c \
 						  src/libft.c \
 						  src/textures.c \
 						  src/parser.c \
+						  src/draw.c \
+						  src/inits.c \
+						  src/draw2.c \
+						  src/map.c \
+						  src/draw3.c \
+						  src/orientation.c \
+						  src/horizontal.c \
+						  src/vertical.c \
 
 OBJS        := $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:17:54 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/13 16:25:27 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/15 15:10:13 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ void	initialize_game(char *file_path)
 		exit(1);
 	}
 	parser(file_path);
+	if (!check_grid())
+	{
+		printf("Erro: mapa inválido\n");
+		exit(1);
+	}
 	create_squares(window);
 	create_map(window);
 	player_img = initialize_player_image();

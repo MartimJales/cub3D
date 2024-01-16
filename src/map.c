@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 20:29:02 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/13 20:30:18 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/15 15:14:57 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,58 @@ void	create_squares(t_win window)
 	draw_square(vars()->wall, CUBESIZE - 1, pos);
 	pos.color = gen_trgb(0, 0, 150, 200);
 	draw_square(vars()->floor, CUBESIZE - 1, pos);
+}
+
+
+void	print_map(void)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < vars()->map_height)
+	{
+		j = 0;
+		while (j < vars()->map_width)
+		{
+			if (vars()->map[i][j] == 1)
+				printf("%d", 1);
+			else
+				printf("%d", vars()->map[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+
+int check_grid()
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < vars()->map_height)
+	{
+		j = 0;
+		while (j < vars()->map_width)
+		{
+			if (vars()->map[i][j] == 2)
+			{
+				if (i > 0 && vars()->map[i - 1][j] == 0)
+					return (0);
+				if (i < vars()->map_height - 1 && vars()->map[i + 1][j] == 0)
+					return (0);
+				if (j > 0 && vars()->map[i][j - 1] == 0)
+					return (0);
+				if (j < vars()->map_width - 1 && vars()->map[i][j + 1] == 0)
+					return (0);
+			}
+			if (vars()->map[i][j] == 0 && (i == vars()->map_height - 1 || j == 0 || j == vars()->map_width - 1 || i == 0))
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
 }

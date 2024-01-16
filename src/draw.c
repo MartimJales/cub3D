@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:38:23 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/13 20:19:23 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/15 11:03:57 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	draw_3d_aux2(void)
 	}
 	else
 		vars()->tx = (int)(vars()->rx) % 64;
-	// vars()->disth *= cos(vars()->ca);
+	vars()->disth *= cos(vars()->ca);//isto tem de ir para outro sitio
 	vars()->pix_size = SCREENWIDTH / RAYNBR;
 }
 

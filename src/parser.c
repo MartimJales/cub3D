@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/14 15:28:38 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/16 18:23:29 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,17 @@ int	char_to_int(char chr)
 	return (chr - '0');
 }
 
-int	check_string(char	*input_str)
+int	check_string(char *input_str)
 {
-	int	start_index;
-	int	end_index;
-
-	end_index = strlen(input_str) - 1;
-	start_index = 0;
-	while (input_str[start_index] == ' ')
-		start_index++;
-	while (end_index >= 0 && input_str[end_index] == ' ')
-		end_index--;
-	if (input_str[start_index] == '1' && input_str[end_index] == '1')
-		return (0);
-	else
-		return (1);
+	while (*input_str != '\0')
+	{
+		if (*input_str == '0' || *input_str == '1')
+		{
+			return (0);
+		}
+		input_str++;
+	}
+	return (1);
 }
 
 int	is_valid_character(char current_char)
@@ -71,8 +67,13 @@ int	validate_string(char *input_str)
 			current_char = '0';
 		}
 		if (current_char == ' ')
-			current_char = '0';
+			current_char = '2';
 		vars()->map[vars()->map_height][index] = char_to_int(current_char);
+		index++;
+	}
+	while (index < vars()->map_width)
+	{
+		vars()->map[vars()->map_height][index] = 2;
 		index++;
 	}
 	return (0);

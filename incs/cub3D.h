@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/13 19:54:03 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/16 18:35:15 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,16 @@ char	*ft_strncpy(char *dest, const char *src, size_t n);
 void	init_colors(const char *str);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strrchr(const char *str, int c);
+void	print_map(void);
+int		check_grid(void);
+int		validate_string(char *input_str);
+int		get_width(char *input_str);
+int		convert_to_int(const char *start, const char *end);
+int		p_string_aux(const char *current_char);
+int		process_string(const char *str);
+int		is_valid_character(char current_char);
+void	validate_aux(char current_char, int index);
+int		char_to_int(char chr);
 
 
 

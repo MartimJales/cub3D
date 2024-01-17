@@ -56,24 +56,30 @@ void	handle_rotation(int keycode)
 
 int	key_hook(int keycode)
 {
-	t_pos	pos;
-
 	handle_exit(keycode);
 	handle_rotation(keycode);
 	handle_movement(keycode);
-	mlx_clear_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
-	pos.x = vars()->player->x;
-	pos.y = vars()->player->y;
-	pos.color = gen_trgb(0, 255, 255, 0);
-	draw_player(vars()->player->img, PLAYERSIZE, pos);
-	draw_rays_2d(*vars()->win);
-	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
-	vars()->player->img.img_ptr, vars()->player->x, vars()->player->y);
 	return (0);
 }
 
-// mlx_destroy_image(vars()->win->mlx_ptr, vars()->img_ptr->img_ptr);
-//mlx_destroy_display(vars()->win->mlx_ptr);
+int	render_hook()
+{
+	t_pos	pos2;
+
+	pos2.color = vars()->ccolor;
+	pos2.x=0;
+	pos2.y=0;
+	draw_rectagle(SCREENWIDTH, SCREENHEIGHT/3, pos2);
+	pos2.y = SCREENHEIGHT/3;
+	pos2.color = vars()->fcolor;
+	draw_rectagle(SCREENWIDTH, 2*SCREENHEIGHT/3, pos2);
+
+	draw_rays_2d(*vars()->win);
+	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
+	vars()->canvas.img_ptr,0, 0);
+	return (0);
+}
+
 int	exit_program(void)
 {
 	mlx_destroy_window(vars()->win->mlx_ptr, vars()->win->win_ptr);

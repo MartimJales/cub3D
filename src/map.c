@@ -54,11 +54,13 @@ void	create_map(t_win window)
 	t_pos		pos;
 	t_img		tmp;
 
+	pos.x = 0;
+	pos.y = 0;
 	mini_cube_size = 16;
-	tmp = new_img(vars()->map_width * CUBESIZE, \
+	tmp = new_img(vars()->map_width * CUBESIZE, 
 vars()->map_height * CUBESIZE, (t_win)window);
 	vars()->map_img = tmp;
-	tmp = new_img(vars()->map_width * mini_cube_size, \
+	tmp = new_img(vars()->map_width * mini_cube_size, 
 vars()->map_height * mini_cube_size, (t_win)window);
 	vars()->mini_map = tmp;
 	map_loop(pos, mini_cube_size);

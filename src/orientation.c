@@ -62,7 +62,6 @@ vars()->ntan + vars()->player->y;
 	}
 }
 
-//aux do vertical_check
 void	up_or_down(double ra)
 {
 	if (ra == 0 || ra == PI)

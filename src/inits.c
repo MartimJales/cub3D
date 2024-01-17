@@ -42,6 +42,8 @@ t_pos	initialize_player_position(void)
 	pos.x = vars()->player->startx * CUBESIZE;
 	pos.y = vars()->player->starty * CUBESIZE;
 	pos.color = gen_trgb(0, 255, 255, 0);
+	vars()->player->x = pos.x;
+	vars()->player->y = pos.y;
 	return (pos);
 }
 
@@ -55,8 +57,15 @@ void	setup_player(void)
 		vars()->player->angle = 0;
 	else if (vars()->player->orientation == 'W')
 		vars()->player->angle = PI;
-	vars()->player->delta_x = 5;
-	vars()->player->delta_y = 0;
+	vars()->player->delta_x = cos(vars()->player->angle) * 5;
+	vars()->player->delta_y = sin(vars()->player->angle) * 5;
+}
+
+int check_images()
+{
+	if (vars()->no.img_ptr && vars()->so.img_ptr && vars()->we.img_ptr && vars()->ea.img_ptr)
+		return 1;
+	return 0;
 }
 
 void	initialize_game(char *file_path)
@@ -69,20 +78,17 @@ void	initialize_game(char *file_path)
 	window = new_program(SCREENWIDTH, SCREENHEIGHT, "cub3d");
 	vars()->win = &window;
 	if (!check_format(file_path))
-	{
-		printf("Error: extensão do arquivo não é .cub\n");
-		exit(1);
-	}
+		exit(printf("Error: extensão do arquivo não é .cub\n") != 0);
 	parser(file_path);
+	if (!check_images())
+		exit(printf("Error: wrong texture paths\n") != 0);
 	if (!check_grid())
-	{
-		printf("Erro: mapa inválido\n");
-		exit(1);
-	}
+		exit(printf("Erro: mapa inválido\n") != 0);
 	create_squares(window);
 	create_map(window);
+	vars()->canvas = new_img(SCREENWIDTH, SCREENHEIGHT, window);
 	player_img = initialize_player_image();
 	setup_player();
-	draw_player_and_rays(window, player_img);
+ 	draw_player_and_rays(window, player_img);
 	handle_hooks_and_put_image(window, player_img);
 }

@@ -12,7 +12,6 @@
 
 #include "../incs/cub3D.h"
 
-//aux do draw_3d_walls
 void	draw_3d_aux1(t_pos pos)
 {
 	vars()->ca = vars()->player->angle - vars()->ra;
@@ -29,7 +28,7 @@ void	draw_3d_aux1(t_pos pos)
 		vars()->ty_off = (vars()->line_h - SCREEN2HEIGHT) / 2;
 		vars()->line_h = SCREEN2HEIGHT;
 	}
-	draw_line(pos, vars()->rx, vars()->ry);
+	(void) pos;
 	vars()->ra += DR;
 	if (vars()->ra < 0)
 		vars()->ra += 2 * PI;
@@ -48,7 +47,7 @@ void	draw_3d_aux2(void)
 	}
 	else
 		vars()->tx = (int)(vars()->rx) % 64;
-	vars()->disth *= cos(vars()->ca);//isto tem de ir para outro sitio
+	vars()->disth *= cos(vars()->ca);
 	vars()->pix_size = SCREENWIDTH / RAYNBR;
 }
 
@@ -73,17 +72,19 @@ void	draw_3d_walls(void)
 	int			y;
 	t_pos		pos;
 	int			color;
+	t_img		wall;
 
 	pos.x = vars()->player->x;
 	pos.y = vars()->player->y;
 	pos.color = gen_trgb(255, 0, 255, 0);
 	draw_3d_aux1(pos);
+	wall = get_wall_img();
 	draw_3d_aux2();
 	y = 0;
 	while (y < vars()->line_h)
 	{
 		color = \
-get_pixel_img(get_wall_img(), (int)(vars()->tx) + (int)(vars()->ty) * 64);
+		get_pixel_img(wall, (int)(vars()->tx) + (int)(vars()->ty) * 64);
 		pos.x = vars()->r * vars()->pix_size;
 		pos.y = SCREEN2HEIGHT / 2 - vars()->line_h / 2 + y;
 		pos.color = color * vars()->shade;
@@ -98,10 +99,6 @@ void	draw_rays_2d(t_win window)
 	double	ra;
 
 	init_vars();
-	mlx_put_image_to_window(vars()->win->mlx_ptr, \
-vars()->win->win_ptr, vars()->ceil_img.img_ptr, 0, 0);
-	mlx_put_image_to_window(vars()->win->mlx_ptr, \
-vars()->win->win_ptr, vars()->floor_img.img_ptr, 0, SCREENHEIGHT / 3);
 	vars()->r = 0;
 	ra = vars()->ra;
 	while (vars()->r < RAYNBR)
@@ -118,6 +115,7 @@ vars()->win->win_ptr, vars()->floor_img.img_ptr, 0, SCREENHEIGHT / 3);
 
 void	draw_player_and_rays(t_win window, t_img player_img)
 {
-	draw_player(player_img, PLAYERSIZE, initialize_player_position());
+	initialize_player_position();
+	 (void) player_img;
 	draw_rays_2d(window);
 }

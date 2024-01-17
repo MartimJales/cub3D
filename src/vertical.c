@@ -21,7 +21,6 @@ void	vertical_vars(double ra)
 	vars()->ntan = -tan(ra);
 }
 
-//aux do vertical_check
 void	vertical_loop(void)
 {
 	double	distv;

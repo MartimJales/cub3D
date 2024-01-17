@@ -68,7 +68,7 @@ typedef struct s_img
 
 typedef struct s_player
 {
-	t_img	img;
+	// t_img	img;
 	double	x;
 	double	y;
 	int		size;
@@ -142,6 +142,8 @@ typedef struct s_var
 	const char	*segment_start;
 	const char	*segment_end;
 
+	t_img	canvas;
+
 }	t_var;
 
 typedef struct s_position
@@ -171,11 +173,10 @@ void	verLine(int x, int y1, int y2, int color);
 // MOVE
 void	draw_wall(t_pos pos, int i, int j, int mini_cube_size);
 void	draw_empty(t_pos pos, int i, int j, int mini_cube_size);
-void	draw_player(t_img img, int size, t_pos pos);
 void	draw_square(t_img img, int size, t_pos pos);
 void	fill_image(t_img img, int color);
 void	draw_rectagle(int width, int height, t_pos pos);
-void	draw_line(t_pos pos, int x1, int y1);
+// void	draw_line(t_pos pos, int x1, int y1);
 void	init_vars(void);
 void	horizontal_check(double ra);
 void	wall_color(void);
@@ -206,6 +207,7 @@ int		process_string(const char *str);
 int		is_valid_character(char current_char);
 void	validate_aux(char current_char, int index);
 int		char_to_int(char chr);
+int		render_hook();
 
 
 

@@ -118,7 +118,6 @@ int	convert_to_int(const char *start, const char *end)
 	return (atoi(number_str));
 }
 
-//aux do process string
 int	p_string_aux(const char *current_char)
 {
 	int	value;
@@ -177,30 +176,6 @@ int	check_format(const char *nome_arquivo)
 	return (0);
 }
 
-// char	*get_next_line(int fd)
-// {
-// 	int		i;
-// 	int		rd;
-// 	char	character;
-// 	char	*buffer;
-
-// 	buffer = malloc(100000);
-// 	i = 0;
-// 	while ((rd = read(fd, &character, 1)) > 0)
-// 	{
-// 		buffer[i++] = character;
-// 		if (character == '\n')
-// 			break ;
-// 	}
-// 	if (i > 0)
-// 		buffer[i - 1] = '\0';
-// 	else
-// 		buffer[i] = '\0';
-// 	if (rd == -1 || i == 0 || (!buffer[i - 1] && !rd))
-// 		return (free(buffer), NULL);
-// 	return (buffer);
-// }
-
 char	*read_line(int fd, int *rd)
 {
 	char	character;
@@ -226,13 +201,6 @@ char	*read_line(int fd, int *rd)
 		buffer[i] = '\0';
 	return (buffer);
 }
-
-// while (1)
-// {
-// 	if (*rd = read(fd, &character, 1)) <= 0)
-// 		break;
-
-// }
 
 char	*get_next_line(int fd)
 {

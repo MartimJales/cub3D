@@ -44,10 +44,10 @@ double	distance(int ax, int ay, int bx, int by)
 
 void	handle_hooks_and_put_image(t_win window, t_img player_img)
 {
+	(void) player_img;
 	mlx_hook(window.win_ptr, 2, 1L << 0, key_hook, vars());
 	mlx_hook(window.win_ptr, 17, 1L << 0, exit_program, vars());
-	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, \
-player_img.img_ptr, vars()->player->x, vars()->player->y);
+	mlx_loop_hook(window.mlx_ptr, (void *) render_hook, NULL);
 	mlx_loop(window.mlx_ptr);
 }
 

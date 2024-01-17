@@ -23,7 +23,6 @@ void	draw_wall(t_pos pos, int i, int j, int mini_cube_size)
 	draw_square(vars()->map_img, CUBESIZE - 1, pos);
 }
 
-//aux create_map
 void	draw_empty(t_pos pos, int i, int j, int mini_cube_size)
 {
 	pos.x = j * mini_cube_size;
@@ -33,14 +32,6 @@ void	draw_empty(t_pos pos, int i, int j, int mini_cube_size)
 	pos.x = j * CUBESIZE;
 	pos.y = i * CUBESIZE;
 	draw_square(vars()->map_img, CUBESIZE - 1, pos);
-}
-
-void	draw_map(void)
-{
-	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
-vars()->map_img.img_ptr, 0, 0);
-	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
-vars()->mini_map.img_ptr, 0, 0);
 }
 
 void	draw_rectagle(int width, int height, t_pos pos)
@@ -54,8 +45,7 @@ void	draw_rectagle(int width, int height, t_pos pos)
 		j = pos.y;
 		while (j < pos.y + height)
 		{
-			mlx_pixel_put(vars()->win->mlx_ptr, \
-vars()->win->win_ptr, i, j, pos.color);
+			put_pixel_img(vars()->canvas, i, j, pos.color);
 			j++;
 		}
 		i++;

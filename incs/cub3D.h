@@ -6,7 +6,7 @@
 /*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/16 18:35:15 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/17 15:38:40 by mjales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,8 @@ int		is_valid_character(char current_char);
 void	validate_aux(char current_char, int index);
 int		char_to_int(char chr);
 int		render_hook();
+int		check_string(char *input_str);
+void	create_images(void);
 
 
 

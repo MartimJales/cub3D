@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:22:51 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/10 15:21:50 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 15:15:44 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	wall_color(void)
 	int	color;
 
 	color = gen_trgb(255, (int)0, 0, 0);
-	if (vars()->distv < vars()->disth)
+	if (vars()->distv <= vars()->disth)
 	{
 		vars()->rx = vars()->vx;
 		vars()->ry = vars()->vy;

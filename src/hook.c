@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 04:13:38 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 16:20:43 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/cub3D.h"
-
-void	handle_exit(int keycode)
-{
-	if (keycode == ESC_KEY_M || keycode == CROSS)
-		exit_program();
-}
 
 void	handle_movement(int keycode)
 {
@@ -80,10 +74,10 @@ int	render_hook(void)
 	pos2.color = vars()->ccolor;
 	pos2.x = 0;
 	pos2.y = 0;
-	draw_rectagle(SCREENWIDTH, SCREENHEIGHT / 3, pos2);
-	pos2.y = SCREENHEIGHT / 3;
+	draw_rectagle(SCREENWIDTH, SCREENHEIGHT / 2, pos2);
+	pos2.y = SCREENHEIGHT / 2;
 	pos2.color = vars()->fcolor;
-	draw_rectagle(SCREENWIDTH, 2 * SCREENHEIGHT / 3, pos2);
+	draw_rectagle(SCREENWIDTH, SCREENHEIGHT / 2, pos2);
 	draw_rays_2d(*vars()->win);
 	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
 	vars()->canvas.img_ptr, 0, 0);

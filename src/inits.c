@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:17:54 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 04:08:24 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 14:41:02 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,11 @@ void	init_vars(void)
 	vars()->xo = 0;
 	vars()->yo = 0;
 	vars()->dist = 0;
-	vars()->ra = vars()->player->angle - (DR * SCREENWIDTH / 2);
+	vars()->ra = vars()->player->angle - (vars()->dr * SCREENWIDTH / 2);
 	if (vars()->ra < 0)
 		vars()->ra += 2 * PI;
 	if (vars()->ra >= 2 * PI)
 		vars()->ra -= 2 * PI;
-}
-
-t_img	initialize_player_image(void)
-{
-	t_img	tmp;
-
-	img_teste(&vars()->teste, "pics/colorstone.xpm");
-	tmp = new_img(PLAYERSIZE, PLAYERSIZE, *vars()->win);
-	return (tmp);
 }
 
 t_pos	initialize_player_position(void)
@@ -61,14 +52,6 @@ void	setup_player(void)
 	vars()->player->delta_y = sin(vars()->player->angle) * 5;
 }
 
-int	check_images(void)
-{
-	if (vars()->no.img_ptr && vars()->so.img_ptr && \
-	vars()->we.img_ptr && vars()->ea.img_ptr)
-		return (1);
-	return (0);
-}
-
 void	initialize_game(char *file_path)
 {
 	t_win		window;
@@ -87,10 +70,9 @@ void	initialize_game(char *file_path)
 		exit(printf("Erro: mapa inválido\n") != 0);
 	create_squares(window);
 	create_map(window);
-	player_img = initialize_player_image();
 	player_img = new_img(SCREENWIDTH, SCREENHEIGHT, window);
 	vars()->canvas = player_img;
 	setup_player();
-	draw_player_and_rays(window, player_img);
+	draw_player_and_rays(window);
 	handle_hooks_and_put_image(window, player_img);
 }

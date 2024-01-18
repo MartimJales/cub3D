@@ -18,7 +18,9 @@ SRCS        :=      src/hook.c \
 						  src/horizontal.c \
 						  src/vertical.c \
 						  src/parser2.c \
-						  src/parser3.c
+						  src/parser3.c \
+						  src/aux.c \
+						  src/parser4.c
 
 OBJS        := $(SRCS:.c=.o)
 

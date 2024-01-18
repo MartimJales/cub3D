@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:38:23 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 03:07:02 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 16:24:13 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	draw_3d_aux1(t_pos pos)
 		vars()->line_h = SCREENHEIGHT;
 	}
 	(void) pos;
-	vars()->ra += DR;
+	vars()->ra += vars()->dr;
 	if (vars()->ra < 0)
 		vars()->ra += 2 * PI;
 	if (vars()->ra >= 2 * PI)
@@ -86,37 +86,10 @@ void	draw_3d_walls(void)
 		color = \
 		get_pixel_img(wall, (int)(vars()->tx) + (int)(vars()->ty) * CUBESIZE);
 		pos.x = vars()->r * vars()->pix_size;
-		pos.y = SCREENHEIGHT / 3 - vars()->line_h / 2 + y;
+		pos.y = SCREENHEIGHT / 2 - vars()->line_h / 2 + y;
 		pos.color = color * vars()->shade;
 		draw_rectagle(vars()->pix_size, vars()->pix_size, pos);
 		vars()->ty += vars()->ty_step;
 		y++;
 	}
-}
-
-void	draw_rays_2d(t_win window)
-{
-	double	ra;
-
-	init_vars();
-	vars()->r = 0;
-	ra = vars()->ra;
-	while (vars()->r < SCREENWIDTH)
-	{
-		ra = vars()->ra;
-		horizontal_check(ra);
-		vertical_check(ra);
-		wall_color();
-		draw_3d_walls();
-		vars()->r++;
-	}
-	(void)window;
-}
-
-void	draw_player_and_rays(t_win window, t_img player_img)
-{
-	initialize_player_position();
-	// We need to take this shit, but i need to test
-	(void) player_img;
-	draw_rays_2d(window);
 }

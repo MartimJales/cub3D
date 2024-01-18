@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:13:18 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/10 12:30:04 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 16:23:51 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,29 @@ void	draw_square(t_img img, int size, t_pos pos)
 		}
 		i++;
 	}
+}
+
+void	draw_rays_2d(t_win window)
+{
+	double	ra;
+
+	init_vars();
+	vars()->r = 0;
+	ra = vars()->ra;
+	while (vars()->r < SCREENWIDTH)
+	{
+		ra = vars()->ra;
+		horizontal_check(ra);
+		vertical_check(ra);
+		wall_color();
+		draw_3d_walls();
+		vars()->r++;
+	}
+	(void)window;
+}
+
+void	draw_player_and_rays(t_win window)
+{
+	initialize_player_position();
+	draw_rays_2d(window);
 }

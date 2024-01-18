@@ -1,1 +1,1 @@
-make re && clear && valgrind ./cub3D $1
+make re && clear && valgrind --leak-check=full ./cub3D $1

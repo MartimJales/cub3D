@@ -3,26 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 04:09:49 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 16:38:31 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-// #define map_height 8
 # define SCREENWIDTH 600
 # define SCREENHEIGHT 512
 # define SCREEN2HEIGHT 320
-// # define RAYNBR SCREENWIDTH
-// # define RAYNBR 60
-
 # define PLAYERSIZE 8
 # define CUBESIZE 64
-
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
@@ -36,8 +31,7 @@
 # define P2 1.57079632679
 # define P3 4.71238898038
 # define FOV 60
-// # define DR 0.0174533
-# define DR ((FOV/(double)(SCREENWIDTH))*(PI/180))
+# define MAXSIZE 100
 
 typedef struct s_data {
 	void	*img;
@@ -69,7 +63,6 @@ typedef struct s_img
 
 typedef struct s_player
 {
-	// t_img	img;
 	double	x;
 	double	y;
 	int		size;
@@ -143,6 +136,7 @@ typedef struct s_var
 	const char	*segment_start;
 	const char	*segment_end;
 	t_img		canvas;
+	double		dr;
 }	t_var;
 
 typedef struct s_position
@@ -161,21 +155,15 @@ int		exit_program(void);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
-
 int		map_color(int intensity, int max);
-
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		put_image(void);
 void	verLine(int x, int y1, int y2, int color);
-
-
-// MOVE
 void	draw_wall(t_pos pos, int i, int j, int mini_cube_size);
 void	draw_empty(t_pos pos, int i, int j, int mini_cube_size);
 void	draw_square(t_img img, int size, t_pos pos);
 void	fill_image(t_img img, int color);
 void	draw_rectagle(int width, int height, t_pos pos);
-// void	draw_line(t_pos pos, int x1, int y1);
 void	init_vars(void);
 void	horizontal_check(double ra);
 void	wall_color(void);
@@ -185,7 +173,7 @@ void	setup_player(void);
 t_pos	initialize_player_position(void);
 void	create_squares(t_win window);
 void	create_map(t_win window);
-void	draw_player_and_rays(t_win window, t_img player_img);
+void	draw_player_and_rays(t_win window);
 void	handle_hooks_and_put_image(t_win window, t_img player_img);
 void	line_vars(t_pos pos, int x1, int y1);
 void	look_up_or_down(double ra);
@@ -206,24 +194,12 @@ int		process_string(const char *str);
 int		is_valid_character(char current_char);
 void	validate_aux(char current_char, int index);
 int		char_to_int(char chr);
-int		render_hook();
+int		render_hook(void);
 int		check_string(char *input_str);
 void	create_images(void);
-
-
-
-// CUB3D
-
-// # define KEY_UP 		126
-// # define KEY_DOWN		125
-// # define KEY_LEFT		123
-// # define KEY_RIGHT		124
-// # define ESC_KEY		53
-// # define BACKSPACE		51
-// # define W_KEY			13
-// # define A_KEY			0
-// # define S_KEY			1
-// # define D_KEY			2
+void	draw_3d_walls(void);
+void	handle_exit(int keycode);
+int		check_images(void);
 
 # define ESC_KEY_M 65307
 # define CROSS -16778144
@@ -240,7 +216,6 @@ void	create_images(void);
 # define KEY_S 115
 # define KEY_D 100
 
-
 void	draw_map(void);
 void	draw_orientation(int size, int color);
 void	draw_rays_2d(t_win window);
@@ -251,6 +226,5 @@ void	img_teste(t_img *img, char *path);
 
 void	parser(char *filename);
 int		check_format(const char *nome_arquivo);
-
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:34:54 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 02:54:40 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 14:11:43 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	handle_hooks_and_put_image(t_win window, t_img player_img)
 int	main(int argc, char **argv)
 {
 	(void)argc;
-	printf("DR = %f\n", DR);
+	vars()->dr = ((FOV / (double)(SCREENWIDTH)) * (PI / 180));
 	initialize_game(argv[1]);
 	return (0);
 }

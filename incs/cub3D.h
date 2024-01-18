@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/17 15:38:40 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 02:21:51 by psm              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define SCREENWIDTH 600
 # define SCREENHEIGHT 512
 # define SCREEN2HEIGHT 320
-# define RAYNBR 60
+# define RAYNBR SCREENWIDTH
 
 # define PLAYERSIZE 8
 # define CUBESIZE 64
@@ -35,8 +35,8 @@
 # define PI 3.1415926535
 # define P2 1.57079632679
 # define P3 4.71238898038
-# define DR 0.0174533
 # define FOV 60
+# define DR ((FOV/(double)RAYNBR)*(PI/180))
 
 typedef struct s_data {
 	void	*img;

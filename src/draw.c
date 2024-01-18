@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:38:23 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/15 11:03:57 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 01:34:49 by psm              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ void	draw_3d_aux1(t_pos pos)
 	if (vars()->ca > 2 * PI)
 		vars()->ca -= 2 * PI;
 	vars()->dist = vars()->dist * cos(vars()->ca);
-	vars()->line_h = (CUBESIZE * SCREEN2HEIGHT / vars()->dist);
+	vars()->line_h = (CUBESIZE * SCREENHEIGHT / vars()->dist);
 	vars()->ty_step = 64.0 / vars()->line_h;
 	vars()->ty_off = 0;
-	if (vars()->line_h > SCREEN2HEIGHT)
+	if (vars()->line_h > SCREENHEIGHT)
 	{
-		vars()->ty_off = (vars()->line_h - SCREEN2HEIGHT) / 2;
-		vars()->line_h = SCREEN2HEIGHT;
+		vars()->ty_off = (vars()->line_h - SCREENHEIGHT) / 2;
+		vars()->line_h = SCREENHEIGHT;
 	}
 	(void) pos;
 	vars()->ra += DR;
@@ -48,7 +48,7 @@ void	draw_3d_aux2(void)
 	else
 		vars()->tx = (int)(vars()->rx) % 64;
 	vars()->disth *= cos(vars()->ca);
-	vars()->pix_size = SCREENWIDTH / RAYNBR;
+	vars()->pix_size = (SCREENWIDTH + (RAYNBR-SCREENWIDTH%RAYNBR))/ RAYNBR;
 }
 
 t_img	get_wall_img(void)
@@ -79,6 +79,7 @@ void	draw_3d_walls(void)
 	pos.color = gen_trgb(255, 0, 255, 0);
 	draw_3d_aux1(pos);
 	wall = get_wall_img();
+	
 	draw_3d_aux2();
 	y = 0;
 	while (y < vars()->line_h)
@@ -86,7 +87,7 @@ void	draw_3d_walls(void)
 		color = \
 		get_pixel_img(wall, (int)(vars()->tx) + (int)(vars()->ty) * 64);
 		pos.x = vars()->r * vars()->pix_size;
-		pos.y = SCREEN2HEIGHT / 2 - vars()->line_h / 2 + y;
+		pos.y = SCREENHEIGHT / 3 - vars()->line_h / 2 + y;
 		pos.color = color * vars()->shade;
 		draw_rectagle(vars()->pix_size, vars()->pix_size, pos);
 		vars()->ty += vars()->ty_step;

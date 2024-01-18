@@ -6,7 +6,7 @@
 /*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:08:25 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 16:38:55 by dcordovi         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:49:17 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	process_character(char *input_str, int index)
 
 	current_char = input_str[index];
 	if (!is_valid_character(current_char))
-		exit(printf("Error: invalid character\n") != 0);
+		exit_program(printf("Error: invalid character\n") != 0);
 	if (current_char == 'N' || current_char == 'S' || \
 		current_char == 'E' || current_char == 'W')
 	{

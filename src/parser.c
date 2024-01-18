@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 16:04:27 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/17 15:37:27 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 19:10:36 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,27 @@ void	parseline(char *line)
 {
 	if (*line == '\n')
 		return ;
-	else if (!ft_strncmp(line, "NO", 2))
-		img_teste(&vars()->no, line + 3);
-	else if (!ft_strncmp(line, "SO", 2))
-		img_teste(&vars()->so, line + 3);
-	else if (!ft_strncmp(line, "WE", 2))
-		img_teste(&vars()->we, line + 3);
-	else if (!ft_strncmp(line, "EA", 2))
-		img_teste(&vars()->ea, line + 3);
-	else if (!ft_strncmp(line, "F", 1))
-		vars()->fcolor = process_string(line + 2);
-	else if (!ft_strncmp(line, "C", 1))
-		vars()->ccolor = process_string(line + 2);
+	else if (!ft_strncmp(line, "NO", 2) && ++vars()->tes[0])
+		img_teste(&vars()->no, line + 3, line);
+	else if (!ft_strncmp(line, "SO", 2) && ++vars()->tes[1])
+		img_teste(&vars()->so, line + 3, line);
+	else if (!ft_strncmp(line, "WE", 2) && ++vars()->tes[2])
+		img_teste(&vars()->we, line + 3, line);
+	else if (!ft_strncmp(line, "EA", 2) && ++vars()->tes[3])
+		img_teste(&vars()->ea, line + 3, line);
+	else if (!ft_strncmp(line, "F", 1) && ++vars()->tes[4])
+		vars()->fcolor = process_string(line);
+	else if (!ft_strncmp(line, "C", 1) && ++vars()->tes[5])
+		vars()->ccolor = process_string(line);
 	else if (!(validate_string(line)) && !(check_string(line)))
 	{
-		vars()->map_height++;
-		if (get_width(line) > vars()->map_width)
+		if (!vars()->tes[0] || !vars()->tes[1] || !vars()->tes[2] || \
+!vars()->tes[3] || !vars()->tes[4] || !vars()->tes[5])
+		{
+			free(line);
+			exit_program(printf("Error: Invalid map\n"));
+		}
+		if (++vars()->map_height && get_width(line) > vars()->map_width)
 			vars()->map_width = get_width(line);
 	}
 }
@@ -87,7 +92,7 @@ void	parser(char *filename)
 	if (fd == -1)
 	{
 		printf("Error\nCould not open file\n");
-		exit(1);
+		exit_program(1);
 	}
 	line = get_next_line(fd);
 	while (line)
@@ -97,8 +102,8 @@ void	parser(char *filename)
 		line = get_next_line(fd);
 	}
 	free(line);
+	line = NULL;
 	close(fd);
-	create_images();
 }
 
 void	fill_image(t_img img, int color)

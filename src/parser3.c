@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:34:55 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/17 15:35:44 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 19:08:15 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ vars()->segment_end);
 	return (0);
 }
 
-int	process_string(const char *str)
+int	process_string(char *str)
 {
 	const char	*current_char;
 
-	init_colors(str);
-	current_char = str;
+	init_colors(str + 2);
+	current_char = str + 2;
 	while (*current_char != '\0')
 	{
 		p_string_aux(current_char);
@@ -90,8 +90,8 @@ int	process_string(const char *str)
 	}
 	if (vars()->segment_count != 3)
 	{
-		printf("Erro: Número incorreto de segmentos.\n");
-		return (0);
+		free(str);
+		exit_program(printf("Erro: Número incorreto de segmentos.\n"));
 	}
 	return (gen_trgb(255, vars()->red, vars()->green, vars()->blue));
 }

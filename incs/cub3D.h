@@ -6,7 +6,7 @@
 /*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 16:38:31 by dcordovi         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:04:12 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_var
 	const char	*segment_end;
 	t_img		canvas;
 	double		dr;
+	int			tes[6];
 }	t_var;
 
 typedef struct s_position
@@ -151,7 +152,7 @@ t_img	new_img(int w, int h, t_win window);
 void	put_pixel_img(t_img img, int x, int y, int color);
 int		key_hook(int keycode);
 int		mouse_hook(int keycode);
-int		exit_program(void);
+int		exit_program(int exit_status);
 t_var	*vars(void);
 int		gen_trgb(int opacity, int red, int green, int blue);
 t_win	new_program(int w, int h, char *str);
@@ -172,7 +173,6 @@ void	initialize_game(char *file_path);
 void	setup_player(void);
 t_pos	initialize_player_position(void);
 void	create_squares(t_win window);
-void	create_map(t_win window);
 void	draw_player_and_rays(t_win window);
 void	handle_hooks_and_put_image(t_win window, t_img player_img);
 void	line_vars(t_pos pos, int x1, int y1);
@@ -190,7 +190,7 @@ int		validate_string(char *input_str);
 int		get_width(char *input_str);
 int		convert_to_int(const char *start, const char *end);
 int		p_string_aux(const char *current_char);
-int		process_string(const char *str);
+int		process_string(char *str);
 int		is_valid_character(char current_char);
 void	validate_aux(char current_char, int index);
 int		char_to_int(char chr);
@@ -222,7 +222,7 @@ void	draw_rays_2d(t_win window);
 double	distance(int ax, int ay, int bx, int by);
 
 int		get_pixel_img(t_img img, int pixel);
-void	img_teste(t_img *img, char *path);
+void	img_teste(t_img *img, char *path, char *line);
 
 void	parser(char *filename);
 int		check_format(const char *nome_arquivo);

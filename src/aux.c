@@ -6,7 +6,7 @@
 /*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:46 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 13:07:13 by dcordovi         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:08:40 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handle_exit(int keycode)
 {
 	if (keycode == ESC_KEY_M || keycode == CROSS)
-		exit_program();
+		exit_program(0);
 }
 
 int	check_borders(int i, int j)
@@ -50,7 +50,8 @@ int	check_grid(void)
 		j = 0;
 		while (j < vars()->map_width)
 		{
-			if (vars()->map[i][j] == 2)
+			if (vars()->map[i][j] == 2 || \
+			(vars()->map[i][j] == vars()->player->orientation))
 			{
 				if (!check_neighbors(i, j))
 					return (0);

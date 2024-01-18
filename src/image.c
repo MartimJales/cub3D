@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   image.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:46 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/17 15:37:36 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 17:45:19 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/cub3D.h"
-
-void	create_images(void)
-{
-	t_img	tmp;
-
-	tmp = new_img(SCREENWIDTH, (int)SCREENHEIGHT / 3, *vars()->win);
-	vars()->ceil_img = tmp;
-	tmp = new_img(SCREENWIDTH, (int)2 * SCREENHEIGHT / 3, *vars()->win);
-	vars()->floor_img = tmp;
-	fill_image(vars()->ceil_img, vars()->ccolor);
-	fill_image(vars()->floor_img, vars()->fcolor);
-}
 
 void	put_pixel_img(t_img img, int x, int y, int color)
 {

@@ -6,7 +6,7 @@
 /*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:17:54 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 14:41:02 by dcordovi         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:57:47 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ t_pos	initialize_player_position(void)
 {
 	t_pos	pos;
 
-	pos.x = vars()->player->startx * CUBESIZE;
-	pos.y = vars()->player->starty * CUBESIZE;
+	pos.x = vars()->player->startx * CUBESIZE + CUBESIZE / 2;
+	pos.y = vars()->player->starty * CUBESIZE + CUBESIZE / 2;
 	pos.color = gen_trgb(0, 255, 255, 0);
 	vars()->player->x = pos.x;
 	vars()->player->y = pos.y;
@@ -54,22 +54,20 @@ void	setup_player(void)
 
 void	initialize_game(char *file_path)
 {
-	t_win		window;
-	t_player	player;
-	t_img		player_img;
+	static t_win		window;
+	static t_player		player;
+	static t_img		player_img;
 
 	vars()->player = &player;
 	window = new_program(SCREENWIDTH, SCREENHEIGHT, "cub3d");
 	vars()->win = &window;
 	if (!check_format(file_path))
-		exit(printf("Error: extensão do arquivo não é .cub\n") != 0);
+		exit_program(printf("Error: extensão do arquivo não é .cub\n") != 0);
 	parser(file_path);
 	if (!check_images())
-		exit(printf("Error: wrong texture paths\n") != 0);
+		exit_program(printf("Error: wrong texture paths\n") != 0);
 	if (!check_grid() || !vars()->player->orientation)
-		exit(printf("Erro: mapa inválido\n") != 0);
-	create_squares(window);
-	create_map(window);
+		exit_program(printf("Erro: mapa inválido\n") != 0);
 	player_img = new_img(SCREENWIDTH, SCREENHEIGHT, window);
 	vars()->canvas = player_img;
 	setup_player();

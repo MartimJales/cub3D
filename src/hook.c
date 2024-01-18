@@ -6,7 +6,7 @@
 /*   By: dcordovi <dcordovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 16:20:43 by dcordovi         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:55:44 by dcordovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,23 @@ int	render_hook(void)
 	return (0);
 }
 
-int	exit_program(void)
+int	exit_program(int exit_status)
 {
-	mlx_destroy_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
-	free(vars()->win->mlx_ptr);
-	exit(0);
+	if (vars()->win->mlx_ptr)
+	{
+		if (vars()->canvas.img_ptr)
+			mlx_destroy_image(vars()->win->mlx_ptr, vars()->canvas.img_ptr);
+		if (vars()->no.img_ptr)
+			mlx_destroy_image(vars()->win->mlx_ptr, vars()->no.img_ptr);
+		if (vars()->so.img_ptr)
+			mlx_destroy_image(vars()->win->mlx_ptr, vars()->so.img_ptr);
+		if (vars()->ea.img_ptr)
+			mlx_destroy_image(vars()->win->mlx_ptr, vars()->ea.img_ptr);
+		if (vars()->we.img_ptr)
+			mlx_destroy_image(vars()->win->mlx_ptr, vars()->we.img_ptr);
+		mlx_destroy_window(vars()->win->mlx_ptr, vars()->win->win_ptr);
+		mlx_destroy_display(vars()->win->mlx_ptr);
+		free(vars()->win->mlx_ptr);
+	}
+	exit(exit_status);
 }

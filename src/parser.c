@@ -52,8 +52,6 @@ char	*get_next_line(int fd)
 	return (buffer);
 }
 
-
-
 void	parseline(char *line)
 {
 	if (*line == '\n')

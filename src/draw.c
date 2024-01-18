@@ -116,6 +116,7 @@ void	draw_rays_2d(t_win window)
 void	draw_player_and_rays(t_win window, t_img player_img)
 {
 	initialize_player_position();
-	 (void) player_img;
+	// We need to take this shit, but i need to test
+	(void) player_img;
 	draw_rays_2d(window);
 }

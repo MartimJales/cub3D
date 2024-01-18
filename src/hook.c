@@ -15,28 +15,29 @@
 void	handle_exit(int keycode)
 {
 	if (keycode == ESC_KEY_M || keycode == CROSS)
-	{
 		exit_program();
-	}
 }
 
 void	handle_movement(int keycode)
 {
+	int	teste_x;
+	int	teste_y;
+
 	if (keycode == KEY_UP_M || keycode == KEY_W)
 	{
-		int teste_x = (vars()->player->x + vars()->player->delta_x*10) / CUBESIZE;
-		int teste_y = (vars()->player->y + vars()->player->delta_y*10) / CUBESIZE;
+		teste_x = (vars()->player->x + vars()->player->delta_x * 10) / CUBESIZE;
+		teste_y = (vars()->player->y + vars()->player->delta_y * 10) / CUBESIZE;
 		if (vars()->map[teste_y][teste_x] == 0)
 		{
 			vars()->player->x += vars()->player->delta_x;
-			vars()->player->y += vars()->player->delta_y;			
+			vars()->player->y += vars()->player->delta_y;
 		}
 	}
 	else if (keycode == KEY_DOWN_M || keycode == KEY_S)
 	{
-		int teste_x = (vars()->player->x - vars()->player->delta_x*10) / CUBESIZE;
-		int teste_y = (vars()->player->y - vars()->player->delta_y*10) / CUBESIZE;
-		if(vars()->map[teste_y][teste_x] == 0)
+		teste_x = (vars()->player->x - vars()->player->delta_x * 10) / CUBESIZE;
+		teste_y = (vars()->player->y - vars()->player->delta_y * 10) / CUBESIZE;
+		if (vars()->map[teste_y][teste_x] == 0)
 		{
 			vars()->player->y -= vars()->player->delta_y;
 			vars()->player->x -= vars()->player->delta_x;
@@ -72,21 +73,20 @@ int	key_hook(int keycode)
 	return (0);
 }
 
-int	render_hook()
+int	render_hook(void)
 {
 	t_pos	pos2;
 
 	pos2.color = vars()->ccolor;
-	pos2.x=0;
-	pos2.y=0;
-	draw_rectagle(SCREENWIDTH, SCREENHEIGHT/3, pos2);
-	pos2.y = SCREENHEIGHT/3;
+	pos2.x = 0;
+	pos2.y = 0;
+	draw_rectagle(SCREENWIDTH, SCREENHEIGHT / 3, pos2);
+	pos2.y = SCREENHEIGHT / 3;
 	pos2.color = vars()->fcolor;
-	draw_rectagle(SCREENWIDTH, 2*SCREENHEIGHT/3, pos2);
-
+	draw_rectagle(SCREENWIDTH, 2 * SCREENHEIGHT / 3, pos2);
 	draw_rays_2d(*vars()->win);
 	mlx_put_image_to_window(vars()->win->mlx_ptr, vars()->win->win_ptr, \
-	vars()->canvas.img_ptr,0, 0);
+	vars()->canvas.img_ptr, 0, 0);
 	return (0);
 }
 

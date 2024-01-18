@@ -14,8 +14,8 @@
 # define CUB3D_H
 
 // #define map_height 8
-# define SCREENWIDTH 600*3
-# define SCREENHEIGHT 512*3
+# define SCREENWIDTH 600
+# define SCREENHEIGHT 512
 # define SCREEN2HEIGHT 320
 // # define RAYNBR SCREENWIDTH
 // # define RAYNBR 60
@@ -142,9 +142,7 @@ typedef struct s_var
 	int			segment_count;
 	const char	*segment_start;
 	const char	*segment_end;
-
-	t_img	canvas;
-
+	t_img		canvas;
 }	t_var;
 
 typedef struct s_position

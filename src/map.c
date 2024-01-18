@@ -57,11 +57,11 @@ void	create_map(t_win window)
 	pos.x = 0;
 	pos.y = 0;
 	mini_cube_size = 16;
-	tmp = new_img(vars()->map_width * CUBESIZE, 
-vars()->map_height * CUBESIZE, (t_win)window);
+	tmp = new_img(vars()->map_width * CUBESIZE, \
+	vars()->map_height * CUBESIZE, (t_win)window);
 	vars()->map_img = tmp;
-	tmp = new_img(vars()->map_width * mini_cube_size, 
-vars()->map_height * mini_cube_size, (t_win)window);
+	tmp = new_img(vars()->map_width * mini_cube_size, \
+	vars()->map_height * mini_cube_size, (t_win)window);
 	vars()->mini_map = tmp;
 	map_loop(pos, mini_cube_size);
 }
@@ -82,7 +82,6 @@ void	create_squares(t_win window)
 	pos.color = gen_trgb(0, 0, 150, 200);
 	draw_square(vars()->floor, CUBESIZE - 1, pos);
 }
-
 
 void	print_map(void)
 {
@@ -106,73 +105,48 @@ void	print_map(void)
 	}
 }
 
-// int check_grid()
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	while (i < vars()->map_height)
-// 	{
-// 		j = 0;
-// 		while (j < vars()->map_width)
-// 		{
-// 			if (vars()->map[i][j] == 2)
-// 			{
-// 				if (i > 0 && vars()->map[i - 1][j] == 0)
-// 					return (0);
-// 				if (i < vars()->map_height - 1 && vars()->map[i + 1][j] == 0)
-// 					return (0);
-// 				if (j > 0 && vars()->map[i][j - 1] == 0)
-// 					return (0);
-// 				if (j < vars()->map_width - 1 && vars()->map[i][j + 1] == 0)
-// 					return (0);
-// 			}
-// 			if (vars()->map[i][j] == 0 && (i == vars()->map_height - 1 || j == 0 || j == vars()->map_width - 1 || i == 0))
-// 				return (0);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (1);
-// }
-
-int check_borders(int i, int j) {
-	return (i == vars()->map_height - 1 || j == 0 || j == vars()->map_width - 1 || i == 0);
+int	check_borders(int i, int j)
+{
+	return (i == vars()->map_height - 1 || \
+	j == 0 || j == vars()->map_width - 1 || i == 0);
 }
 
 // Function to check neighboring cells
-int check_neighbors(int i, int j) {
+int	check_neighbors(int i, int j)
+{
 	if (i > 0 && vars()->map[i - 1][j] == 0)
-		return 0;
+		return (0);
 	if (i < vars()->map_height - 1 && vars()->map[i + 1][j] == 0)
-		return 0;
+		return (0);
 	if (j > 0 && vars()->map[i][j - 1] == 0)
-		return 0;
+		return (0);
 	if (j < vars()->map_width - 1 && vars()->map[i][j + 1] == 0)
-		return 0;
-	return 1;
+		return (0);
+	return (1);
 }
 
 // Function to check the entire grid
-int check_grid() {
-	int i, j;
+int	check_grid(void)
+{
+	int	i;
+	int	j;
 
 	i = 0;
-	while (i < vars()->map_height) {
+	while (i < vars()->map_height)
+	{
 		j = 0;
-		while (j < vars()->map_width) {
-			if (vars()->map[i][j] == 2) {
+		while (j < vars()->map_width)
+		{
+			if (vars()->map[i][j] == 2)
+			{
 				if (!check_neighbors(i, j))
-					return 0;
+					return (0);
 			}
 			if (vars()->map[i][j] == 0 && check_borders(i, j))
-				return 0;
+				return (0);
 			j++;
 		}
 		i++;
 	}
-	return 1;
+	return (1);
 }
-
-

@@ -12,7 +12,6 @@
 
 #include "../incs/cub3D.h"
 
-
 void	horizontal_vars(double ra)
 {
 	vars()->dof = 0;

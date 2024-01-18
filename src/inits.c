@@ -61,11 +61,12 @@ void	setup_player(void)
 	vars()->player->delta_y = sin(vars()->player->angle) * 5;
 }
 
-int check_images()
+int	check_images(void)
 {
-	if (vars()->no.img_ptr && vars()->so.img_ptr && vars()->we.img_ptr && vars()->ea.img_ptr)
-		return 1;
-	return 0;
+	if (vars()->no.img_ptr && vars()->so.img_ptr && \
+	vars()->we.img_ptr && vars()->ea.img_ptr)
+		return (1);
+	return (0);
 }
 
 void	initialize_game(char *file_path)
@@ -86,9 +87,10 @@ void	initialize_game(char *file_path)
 		exit(printf("Erro: mapa inválido\n") != 0);
 	create_squares(window);
 	create_map(window);
-	vars()->canvas = new_img(SCREENWIDTH, SCREENHEIGHT, window);
 	player_img = initialize_player_image();
+	player_img = new_img(SCREENWIDTH, SCREENHEIGHT, window);
+	vars()->canvas = player_img;
 	setup_player();
- 	draw_player_and_rays(window, player_img);
+	draw_player_and_rays(window, player_img);
 	handle_hooks_and_put_image(window, player_img);
 }

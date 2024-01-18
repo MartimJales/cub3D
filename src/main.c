@@ -41,7 +41,6 @@ double	distance(int ax, int ay, int bx, int by)
 	return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
-
 void	handle_hooks_and_put_image(t_win window, t_img player_img)
 {
 	(void) player_img;

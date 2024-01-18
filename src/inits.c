@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:17:54 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/15 15:10:13 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 04:08:24 by psm              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_vars(void)
 	vars()->xo = 0;
 	vars()->yo = 0;
 	vars()->dist = 0;
-	vars()->ra = vars()->player->angle - DR * FOV / 2;
+	vars()->ra = vars()->player->angle - (DR * SCREENWIDTH / 2);
 	if (vars()->ra < 0)
 		vars()->ra += 2 * PI;
 	if (vars()->ra >= 2 * PI)
@@ -82,7 +82,7 @@ void	initialize_game(char *file_path)
 	parser(file_path);
 	if (!check_images())
 		exit(printf("Error: wrong texture paths\n") != 0);
-	if (!check_grid())
+	if (!check_grid() || !vars()->player->orientation)
 		exit(printf("Erro: mapa inválido\n") != 0);
 	create_squares(window);
 	create_map(window);

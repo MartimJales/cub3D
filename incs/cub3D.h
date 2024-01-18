@@ -6,19 +6,19 @@
 /*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:18:10 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 02:21:51 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 04:09:49 by psm              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-// #define map_width 8
 // #define map_height 8
-# define SCREENWIDTH 600
-# define SCREENHEIGHT 512
+# define SCREENWIDTH 600*3
+# define SCREENHEIGHT 512*3
 # define SCREEN2HEIGHT 320
-# define RAYNBR SCREENWIDTH
+// # define RAYNBR SCREENWIDTH
+// # define RAYNBR 60
 
 # define PLAYERSIZE 8
 # define CUBESIZE 64
@@ -36,7 +36,8 @@
 # define P2 1.57079632679
 # define P3 4.71238898038
 # define FOV 60
-# define DR ((FOV/(double)RAYNBR)*(PI/180))
+// # define DR 0.0174533
+# define DR ((FOV/(double)(SCREENWIDTH))*(PI/180))
 
 typedef struct s_data {
 	void	*img;

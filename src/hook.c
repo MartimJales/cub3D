@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjales <mjales@student.42.fr>              +#+  +:+       +#+        */
+/*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 19:36:18 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/13 15:28:36 by mjales           ###   ########.fr       */
+/*   Updated: 2024/01/18 04:13:38 by psm              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,23 @@ void	handle_movement(int keycode)
 {
 	if (keycode == KEY_UP_M || keycode == KEY_W)
 	{
-		vars()->player->y += vars()->player->delta_y;
-		vars()->player->x += vars()->player->delta_x;
+		int teste_x = (vars()->player->x + vars()->player->delta_x*10) / CUBESIZE;
+		int teste_y = (vars()->player->y + vars()->player->delta_y*10) / CUBESIZE;
+		if (vars()->map[teste_y][teste_x] == 0)
+		{
+			vars()->player->x += vars()->player->delta_x;
+			vars()->player->y += vars()->player->delta_y;			
+		}
 	}
 	else if (keycode == KEY_DOWN_M || keycode == KEY_S)
 	{
-		vars()->player->y -= vars()->player->delta_y;
-		vars()->player->x -= vars()->player->delta_x;
+		int teste_x = (vars()->player->x - vars()->player->delta_x*10) / CUBESIZE;
+		int teste_y = (vars()->player->y - vars()->player->delta_y*10) / CUBESIZE;
+		if(vars()->map[teste_y][teste_x] == 0)
+		{
+			vars()->player->y -= vars()->player->delta_y;
+			vars()->player->x -= vars()->player->delta_x;
+		}
 	}
 }
 

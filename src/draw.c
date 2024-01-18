@@ -6,7 +6,7 @@
 /*   By: psm <psm@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:38:23 by mjales            #+#    #+#             */
-/*   Updated: 2024/01/18 01:34:49 by psm              ###   ########.fr       */
+/*   Updated: 2024/01/18 03:07:02 by psm              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	draw_3d_aux1(t_pos pos)
 		vars()->ca -= 2 * PI;
 	vars()->dist = vars()->dist * cos(vars()->ca);
 	vars()->line_h = (CUBESIZE * SCREENHEIGHT / vars()->dist);
-	vars()->ty_step = 64.0 / vars()->line_h;
+	vars()->ty_step = CUBESIZE / vars()->line_h;
 	vars()->ty_off = 0;
 	if (vars()->line_h > SCREENHEIGHT)
 	{
@@ -42,13 +42,13 @@ void	draw_3d_aux2(void)
 {
 	if (vars()->disth >= vars()->distv)
 	{
-		vars()->tx = (int)(vars()->ry) % 64;
+		vars()->tx = (int)(vars()->ry) % CUBESIZE;
 		vars()->shade = 0.5;
 	}
 	else
-		vars()->tx = (int)(vars()->rx) % 64;
+		vars()->tx = (int)(vars()->rx) % CUBESIZE;
 	vars()->disth *= cos(vars()->ca);
-	vars()->pix_size = (SCREENWIDTH + (RAYNBR-SCREENWIDTH%RAYNBR))/ RAYNBR;
+	vars()->pix_size = 1;
 }
 
 t_img	get_wall_img(void)
@@ -79,13 +79,12 @@ void	draw_3d_walls(void)
 	pos.color = gen_trgb(255, 0, 255, 0);
 	draw_3d_aux1(pos);
 	wall = get_wall_img();
-	
 	draw_3d_aux2();
 	y = 0;
 	while (y < vars()->line_h)
 	{
 		color = \
-		get_pixel_img(wall, (int)(vars()->tx) + (int)(vars()->ty) * 64);
+		get_pixel_img(wall, (int)(vars()->tx) + (int)(vars()->ty) * CUBESIZE);
 		pos.x = vars()->r * vars()->pix_size;
 		pos.y = SCREENHEIGHT / 3 - vars()->line_h / 2 + y;
 		pos.color = color * vars()->shade;
@@ -102,7 +101,7 @@ void	draw_rays_2d(t_win window)
 	init_vars();
 	vars()->r = 0;
 	ra = vars()->ra;
-	while (vars()->r < RAYNBR)
+	while (vars()->r < SCREENWIDTH)
 	{
 		ra = vars()->ra;
 		horizontal_check(ra);
